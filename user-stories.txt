@@ -1,0 +1,51 @@
+-- a user should be able to create a new user account
+-- a user should be able to log in
+-- a user should be able to log out
+-- a user should be able to create a profile
+    -- user name
+    -- user email
+    -- user avatar/photo
+    -- user home city
+    -- a user should be able to add a photo of a spot and assign it a location
+    -- a user should be able to add a video of a spot and assign it a location
+    -- a user should be able to see all posted photos
+    -- a user should be able to see all posted videos
+    -- a user should be able to delete a posted photo
+    -- a user should be able to delete a posted video
+    -- a user should be able to see all upvotes for their posted photos
+    -- a user should be able to see all upvotes for their posted videos
+    -- a user should be able to edit their profile picture
+    -- a user should be able to edit their username
+    -- a user should be able to edit their email
+    -- a user should be able to edit their password?
+-- a user should be able to see all the RadSpots in austin
+-- a user should be able to filter spots based on rating
+-- a user should be able to add a spot
+-- a user should be able to link to a RadSpot
+    -- RadSpot page should have spot name
+    -- RadSpot page should have location address
+    -- RadSpot page should list all users that are at the spot
+    -- current user should be able to start a chat with another user at the spot
+    -- current user should be able to link to users that are at the spot
+    -- RadSpot page should show all comments of spot
+    -- a user should be able to add a comment about the spot
+    -- a user should be able to delete a comment about the spot
+    -- RadSpot page should show all posted videos from the spot
+    -- RadSpot page should show all the posted photos from the spot
+    -- a user should be able to upvote a video of the spot
+    -- a user should be able to upvote a photo of the spot
+    -- a user should only be able to upvote a video once
+    -- a user should only be able to upvote a photo once
+    -- a user should be able to add a video of the spot
+      -- added video should appear under the users profile
+    -- a user should be able to add a photo of the spot
+      -- added photo should appear under the users profile
+  -- a user should be able to see all of the photos of all the spots
+  -- a photo should link to the user that added it
+  -- a photo should link to the spot where the photo was added
+  -- a user should be able to see all the videos of all the spots
+  -- a video should link to the user that added it
+  -- a video should link to the spot where the video was added
+  -- a user should be able to search other users in the database
+      -- displayed users should link to their profile page
+      -- current user should be able to start a chat with a user
