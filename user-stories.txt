@@ -8,10 +8,10 @@
     -- user home city
     -- a user should be able to add a photo of a spot and assign it a location
     -- a user should be able to add a video of a spot and assign it a location
-    -- a user should be able to see all posted photos
-    -- a user should be able to see all posted videos
-    -- a user should be able to delete a posted photo
-    -- a user should be able to delete a posted video
+    -- a user should be able to see all of their posted photos
+    -- a user should be able to see all their posted videos
+    -- a user should be able to delete one of their posted photos
+    -- a user should be able to delete one of their posted videos
     -- a user should be able to see all upvotes for their posted photos
     -- a user should be able to see all upvotes for their posted videos
     -- a user should be able to edit their profile picture
@@ -24,12 +24,16 @@
 -- a user should be able to link to a RadSpot
     -- RadSpot page should have spot name
     -- RadSpot page should have location address
-    -- RadSpot page should list all users that are at the spot
+    -- RadSpot page should list all users that are at the spot currently
+    -- a user should be able to check in to a spot
+    -- a user should be able to check out from a spot
+    -- RadSpot page should have a notification if another user checks in to that spot
+    -- RadSpot page should have a notification if another user checks out from that spot
     -- current user should be able to start a chat with another user at the spot
     -- current user should be able to link to users that are at the spot
     -- RadSpot page should show all comments of spot
     -- a user should be able to add a comment about the spot
-    -- a user should be able to delete a comment about the spot
+    -- a user should be able to delete a comment about the spot that they posted
     -- RadSpot page should show all posted videos from the spot
     -- RadSpot page should show all the posted photos from the spot
     -- a user should be able to upvote a video of the spot
@@ -49,3 +53,4 @@
   -- a user should be able to search other users in the database
       -- displayed users should link to their profile page
       -- current user should be able to start a chat with a user
+  -- a user should not be able to edit another users profile
