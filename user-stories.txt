@@ -53,4 +53,5 @@
   -- a user should be able to search other users in the database
       -- displayed users should link to their profile page
       -- current user should be able to start a chat with a user
-  -- a user should not be able to edit another users profile
+  -- a user should be able to follow another user
+  -- a user should be able to set their checkins to private while allowing pictures and videos.
