@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css" rel="stylesheet" />
+
+
+  <meta charset="utf-8">
+  <title>ugh</title>
+
+</head>
+
+
+<!-- map styles to be moved to css -->
+<div id="map" style="width: 400px; height: 300px;">
+  <style>
+    .marker {
+      background-image: url('images/skater.png');
+      background-size: cover;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .mapboxgl-popup {
+      max-width: 200px;
+    }
+
+    .mapboxgl-popup-content {
+      text-align: center;
+      font-family: 'Open Sans', sans-serif;
+    }
+  </style>
+
+
+
+
+  <script>
+    var points = <%- feature %>
+  </script>
+</div>
+
+
+<script>
+  // create new map ...options to set center point to where the map starts out
+
+  mapboxgl.accessToken = "pk.eyJ1IjoibWF3YXJyZW4iLCJhIjoiY2piZmdlODFuMnlzejJycGU2amoxdG44NyJ9.GlbjGsu0VqzCls45AniQgw";
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [-97.7431, 30.2672],
+    zoom: 10
+  });
+
+  // track user location
+
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    trackUserLocation: true
+  }));
+
+
+
+
+  /* add a layer to the map that consists of the point location information in geoJSON format */
+  map.on('load', function(e) {
+
+    map.addLayer({
+      "id": "locations",
+      "type": "symbol",
+      // geoJSON object containing location coordinates
+      "source": {
+        "type": "geojson",
+        "data": points  // data passed in from map route (feature)
+      },
+      "layout": {
+        // can set icon image here
+        "icon-image": "icon",
+        "icon-allow-overlap": true,
+      }
+    })
+
+  });
+  //});
+
+  var nav = new mapboxgl.NavigationControl();
+  map.addControl(nav, 'top-left');
+  // add markers to map
+  points.features.forEach(function(marker) {
+
+    // create a HTML element for each feature
+    var el = document.createElement('div');
+    el.className = 'marker';
+
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      // add a popup for the marker
+      .setPopup(new mapboxgl.Popup({
+          offset: 25
+        }) // add popup text
+        .setHTML('<h3>' + marker.properties.name + '</h3>' + '<p>' + marker.properties.address + '</p>'))
+
+      .addTo(map);
+  });
+</script>
+
+
+
+
+
+
+<body>
+
+</body>
+
+</html>
