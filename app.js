@@ -37,7 +37,11 @@ app.use(morgan('short'));
 
 //setup passport and passport sesssions
 
-app.use(session({secret: 'keyboard cat'}));
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());  //use for flash messages stored in session
@@ -94,13 +98,15 @@ passport.use('login', new localStrategy({
 
 //serialize user for the session -- keep them logged in
 passport.serializeUser(function(user, done) {
+  console.log('i am serializedddddddddddd')
+  console.log(user, 'serial user')
   done(null, user);
 
 })
 
-//deserialize user after the sesssion -- log out a user -- i dont work yet
-passport.deserializeUser(function(id, done) {
 
+passport.deserializeUser(function(id, done) {
+console.log('im deserialized boooooooo')
   knex('users').where('id', id[0].id)
     .then(function(results) {
       if (results) {

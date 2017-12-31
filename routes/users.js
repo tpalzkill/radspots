@@ -7,16 +7,28 @@ var config = require('../knexfile')['development'];
 var knex = require('knex')(config);
 const passport = require('passport')
 
-//get index page only if a user is logged in
-router.get('/', isLoggedIn, function(req, res) {
-  res.render('index', {user: req.session.passport.user})
+
+router.get('/', function(req, res) {
+  console.log(req.session.passport.user, 'WTF')
+  res.render('index')
 })
 
 
-//logout -- i dont work yet
+//get page only if a user is logged in
+router.get('/profile', isLoggedIn, function(req, res) {
+  console.log(req.session.passport.user, 'WTF')
+  res.render('profile', {user: req.session.passport.user})
+})
+
+router.get('/success', isLoggedIn, function(req, res) {
+  res.render('success', {user: req.session.passport.user})
+})
+
+//logout 
 router.get('/logout', function(req, res) {
   req.logout();
-  res.redirect('/login')
+  console.log(req.session.passport, 'AFTER LOGOUT')
+  res.render('logout', {user: req.session.passport.user})
 })
 
 // get signup page
@@ -57,7 +69,7 @@ router.get('/login', function(req, res) {
 
 //if login is correct then redirect to index if not go back to login screen
 router.post('/login', passport.authenticate('login', {
-  successRedirect : '/users',
+  successRedirect : '/users/profile',
   failureRedirect: '/login',
   failureFlash : true
 
