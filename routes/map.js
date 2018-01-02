@@ -88,6 +88,7 @@ getGeoLocations()
 router.get('/', function(req, res) {
 
   let feature = JSON.stringify(locationsFeatureCollection)
+
   res.render('map', {
     feature: feature
   });

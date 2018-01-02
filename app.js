@@ -93,9 +93,6 @@ passport.use('login', new localStrategy({
 
 
 
-
-
-
 //serialize user for the session -- keep them logged in
 passport.serializeUser(function(user, done) {
   console.log('i am serializedddddddddddd')
@@ -114,6 +111,14 @@ console.log('im deserialized boooooooo')
       }
     })
 })
+
+
+
+
+
+
+
+
 
 
 // Starting the server/ telling it which port to run on.
