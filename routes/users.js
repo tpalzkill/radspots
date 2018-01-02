@@ -205,7 +205,15 @@ router.post('/login', passport.authenticate('login', {
 
 }));
 
+/*  ====================================================================
+                get user profile page if logged in
+====================================================================  */
 
+router.get('/profile', isLoggedIn, function(req, res) {
+
+    res.render('profile', {user: req.session.passport.user});
+
+});
 
 
 /*  ====================================================================

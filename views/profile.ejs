@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<% inlcude partials/header %>
+  <body>
+
+    <div class="container is-fluid">
+      <div class="tile is-ancestor">
+
+        <!-- left colum -->
+
+        <div class="tile is-3 is-vertical is-parent">
+          <div class="tile is-child box">
+            <figure class="image is-2by3">
+              <img src= "<%= user[0].profile_photo %>"
+            </figure>
+        </div>
+          <div class="tile is-child box">
+            <table class="table">
+              <tr>
+                <td>Followers: <%=
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+
+          <!-- right colum -->
+
+          <div class="tile is-9 is-vertical is-parent">
+            <div class="tile is-child box">
+            </div>
+          </div>
+
+
+
+
+
+      </div>
+    </div>
+
+
+    <% include partials/footer %>
+  </body>
+</html>
