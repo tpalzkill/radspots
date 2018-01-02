@@ -5,6 +5,7 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
+<<<<<<< HEAD
       host: '127.0.0.1',
       database: 'rad',
       user: 'melissawarren',
@@ -16,6 +17,9 @@ module.exports = {
     },
     seeds: {
       directory: './seeds'
+=======
+      filename: './dev.sqlite3'
+>>>>>>> 4c26a242c3c2a1ff6742884e929760cedadbb8c9
     }
   },
 
@@ -45,6 +49,12 @@ module.exports = {
     pool: {
       min: 2,
       max: 10
+<<<<<<< HEAD
+=======
+    },
+    migrations: {
+      tableName: 'knex_migrations'
+>>>>>>> 4c26a242c3c2a1ff6742884e929760cedadbb8c9
     }
   }
 
