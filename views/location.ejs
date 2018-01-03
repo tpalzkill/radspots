@@ -11,9 +11,9 @@
 
           <!-- ***********************************************************
                   left column
-        ************************************************************** -->
+************************************************************** -->
 
-          <aside class="column is-3 aside hero is-fullheight top-space">
+          <aside class="column is-3 top-space">
 
             <figure class="image is-1by2">
               <% if (spot[0].image) { %>
@@ -24,6 +24,37 @@
             </figure>
 
             <h1 class="title is-3"><%= spot[0].spot_name %></h1>
+
+<!-- ***********************************************************
+                  checkin  / upvote buttons
+************************************************************** -->
+
+<div class="level">
+  <div class="level-item">
+            <form class="" action="/users/location" method="post">
+              <div class="field">
+                <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                <input type="hidden" name="checkin" value="true">
+                <button class="button is-success is-outlined is-focus" type="submit">Checkin</button>
+              </div>
+            </form>
+          </div>
+
+
+          <div class="level-item">
+
+            <form class="" action="/users/location" method="post">
+              <div class="field">
+                <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                <input type="hidden" name="upvote" value="1">
+                <button class="button is-success is-outlined is-focus" type="submit">Upvote</button>
+              </div>
+            </form>
+</div>
+  </div>
+
             <p class="subtitle is-6">
               <%= spot[0].spot_location %>
             </p>
@@ -41,7 +72,18 @@
               <div class="level-item has-text-centered">
                 <div>
                   <p class="heading">Checkins</p>
-                  <p class="title"> </p>
+                  <% var count = 0 %>
+                  <% if (checkins) { %>
+
+                  <% checkins.forEach(function(checkin) { %>
+                    <% if (checkin.spot_id === spot[0].id) { %>
+                        <% count++ %>
+                    <% } %>
+                    <%  })  %>
+                    <p class="title"><%= count %> </p>
+                    <%  } else { %>
+                  <p class="title"><%= count %> </p>
+                  <% } %>
                 </div>
               </div>
               <div class="level-item has-text-centered">
@@ -57,9 +99,9 @@
 
 
 
-            <!-- ***************************************************
+<!-- ***************************************************
                           Map
-                  ******************************************************** -->
+******************************************************** -->
 
             <!-- map styles to be moved to css -->
             <div id="map" style="width: 200px; height: 200px">
@@ -143,36 +185,16 @@
             </script>
 
 
-
-            <div class="level">
-              <div class="level-item has-text-centered" id="photo-icon">
-                <a>
-                  <div>
-                    <i class="fa fa-camera-retro fa-3x"></i>
-                    <p class="heading">Photos</p>
-                  </div>
-                </a>
-              </div>
-              <div class="level-item has-text-centered" id="video-icon">
-                <a>
-                  <div>
-                    <i class="fa fa-film fa-3x" aria-hidden="true"></i>
-                    <p class="heading">Videos</p>
-                  </div>
-                </a>
-              </div>
-
-            </div>
-
           </aside>
 
 <!-- ***********************************************************
           right column
 ************************************************************** -->
 
-          <div class="column">
+          <div class="column is-8 is-offset-1">
 
-            <div class="tabs is-right" id="nav-tabs">
+
+            <div class="tabs is-left" id="nav-tabs">
               <ul>
                 <a>
                   <li id="photos">Photos</li>
@@ -202,10 +224,84 @@
 ************************************************************** -->
 
             <div class="get-content">
-              <div class="photos hidden">HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALALLALALALALALALALALALAL"</div>
+              <div class="photos hidden">HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"</div>
               <div class="videos hidden">HEYO THIS IS VIDEOS CONTENT"</div>
-              <div class="checkins hidden">HEYO THIS IS CHECKINS CONTENT"</div>
-              <div class="feed hidden">HEYO THIS IS FEED CONTENT"</div>
+<!-- ***********************************************************
+              tab content // show checkins
+************************************************************** -->
+              <div class="checkins hidden">
+              <% if (checkins) { %>
+              <% checkins.forEach(function(checkin) { %>
+                <% if (checkin.spot_id === spot[0].id) { %>
+                <div class="tile is-ancestor">
+                  <div class="tile is-parent is-vertical is-8">
+                    <div class="tile box is-child">
+                      <h3 class="title is-5">
+
+                    <%= checkin.full_name %> Checked In %></h3>
+                    <h3 class="subtitle is-6"><%= checkin.updated_at %></h3>
+
+
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+                <%  })  %>
+                <%  }  %>
+                </div>
+
+<!-- ***********************************************************
+                    tab content // show spot feed
+************************************************************** -->
+              <div class="feed hidden">
+
+                <% comments.forEach(function(comment) { %>
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical is-8">
+                      <div class="tile box is-child">
+                        <h3 class="title is-5">
+
+                      <%= comment.full_name %>
+                    </h3>
+                        <p>
+                          <%= comment.comment %>
+                      </div>
+                    </div>
+                  </div>
+                  <%  })  %>
+
+
+
+
+
+
+
+
+
+                <% if (checkins) { %>
+                <% checkins.forEach(function(checkin) { %>
+                  <% if (checkin.spot_id === spot[0].id) { %>
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical is-8">
+                      <div class="tile box is-child">
+                        <h3 class="title is-5">
+
+                      <%= checkin.full_name %> Checked In %></h3>
+                      <h3 class="subtitle is-6"><%= checkin.updated_at %></h3>
+
+
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+                  <%  })  %>
+                  <%  }  %>
+
+
+
+
+
+              </div>
 
 
 <!-- ***********************************************************
@@ -234,34 +330,36 @@
               </div>
 
 <!-- ***********************************************************
-                tab content // post a comment
+                tab content // show comments
 ************************************************************** -->
-          <div class="comments hidden">
-            helllooooooooooooooooooooo
+              <div class="comments hidden">
 
-            <% comments.forEach(function(comment) { %>
-              <div class="tile is-ancestor">
-                <div class="tile is-parent is-vertical is-7">
-                  <div class="tile box is-child">
-                    <h3 class="title is-5">
+                <% comments.forEach(function(comment) { %>
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical is-8">
+                      <div class="tile box is-child">
+                        <h3 class="title is-5">
 
-                      <%= comment.user_id %>
+                      <%= comment.full_name %>
                     </h3>
-                    <p> <%= comment.comment %>
+                        <p>
+                          <%= comment.comment %>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <%  })  %>
+
+
+
+
+
               </div>
-          <%  })  %>
-
-
-
-
-
-          </div>
 
             </div>
 
           </div>
+
+
 
         </div>
       </div>

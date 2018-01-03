@@ -28,15 +28,4 @@ $(document).ready(function() {
     $('.' + target).toggleClass('hidden');
   });
 
-
-  $('#photo-icon').on('click', function() {
-    $('div.get-content > div').not('.hidden').toggleClass('hidden');
-    $('.photos').toggleClass('hidden');
-  });
-
-
-  $('#video-icon').on('click', function() {
-    $('div.get-content > div').not('.hidden').toggleClass('hidden');
-    $('.videos').toggleClass('hidden');
-  });
 });

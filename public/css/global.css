@@ -8,3 +8,7 @@
 .top-space {
   margin-top: 30px;
 }
+.sticky{
+  position: sticky;
+  top: 15%;
+}

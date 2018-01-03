@@ -81,12 +81,12 @@ function geo(err, data, results) {
   });
 }
 
-  getGeoLocations();
+getGeoLocations();
 
 
-  /*  ====================================================================
-                get user login page
-  ====================================================================  */
+/*  ====================================================================
+              get user login page
+====================================================================  */
 
 router.get('/', function(req, res) {
   console.log(req.session.passport.user, 'WTF');
@@ -100,7 +100,10 @@ router.get('/', function(req, res) {
 router.get('/main', isLoggedIn, function(req, res) {
   //map locations
   let feature = JSON.stringify(locationsFeatureCollection);
-  res.render('main', {user: req.session.passport.user, feature: feature});
+  res.render('main', {
+    user: req.session.passport.user,
+    feature: feature
+  });
 });
 
 /*  ====================================================================
@@ -116,60 +119,228 @@ router.post('/location', isLoggedIn, function(req, res) {
   };
   var comments;
 
-// if you received a post request with a comment
+console.log(req.body.upvote, 'REQ BODY UPVOTE')
+  // if you received a upvote request
+  if (req.body.upvote) {
+    console.log('helloooooooooooooooooooooooooo')
+    knex('spots').where('spot_name', req.body.spot_name)
+      .then(function(results) {
+        let upvoteVal = results[0].upvotes
+
+        return knex ('spots').where('spot_name', req.body.spot_name)
+        .update({upvotes: upvoteVal + 1})
+
+        .then(function() {
+          knex('comments').where('spot_id', req.body.spot_id)
+            .join('users', 'comments.user_id', 'users.id')
+            .then(function(results) {
+              comments = results;
+
+              locationsFeatureCollection.features.forEach(function(feature) {
+                if (feature.properties.name === req.body.spot_name) {
+                  featureSpot.features.push(feature);
+                }
+              });
+
+              let featureSpotString = JSON.stringify(featureSpot);
+
+              knex('spots').where('spot_name', req.body.spot_name)
+                .then(function(results) {
+                  let spot = results;
+                  console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+
+                  knex('users')
+                  .join('checkins', 'users.id', 'checkins.user_id')
+                    .then(function(results) {
+                      let checkins = results;
+
+  console.log (checkins, 'CHECKIN FOR CHECKIN REQUEST')
+                      res.render('location', {
+                        user: req.session.passport.user,
+                        feature: featureSpotString,
+                        spot: spot,
+                        comments: comments,
+                        checkins: checkins
+                      });
+                    });
+                });
+            });
+        });
+    });
+
+
+  }
+
+  // if you received a post request with a comment
   if (req.body.comment) {
+
+    let checkins2;
     return knex('comments')
-    .insert({
-      user_id : req.session.passport.user[0].id,
-      spot_id : req.body.spot_id,
-      comment: req.body.comment
-    })
-    .then(function () {
-      knex('comments').where('spot_id', req.body.spot_id)
-      .then(function (results) {
-        comments = results;
+      .insert({
+        user_id: req.session.passport.user[0].id,
+        spot_id: req.body.spot_id,
+        comment: req.body.comment
+      })
+      .then(function() {
+        knex('comments').where('spot_id', req.body.spot_id)
+          .join('users', 'comments.user_id', 'users.id')
+          .then(function(results) {
+            comments = results;
 
-        locationsFeatureCollection.features.forEach(function(feature) {
-          if (feature.properties.name === req.body.spot_name) {
-            featureSpot.features.push(feature);
-          }
-        });
+            locationsFeatureCollection.features.forEach(function(feature) {
+              if (feature.properties.name === req.body.spot_name) {
+                featureSpot.features.push(feature);
+              }
+            });
 
-        let featureSpotString = JSON.stringify(featureSpot);
+            let featureSpotString = JSON.stringify(featureSpot);
 
-        knex('spots').where('spot_name', req.body.spot_name)
-        .then(function (results) {
-          let spot = results;
-          console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+            knex('spots').where('spot_name', req.body.spot_name)
+              .then(function(results) {
+                let spot = results;
 
-          res.render('location', {user: req.session.passport.user, feature: featureSpotString, spot: spot, comments:comments});
-        });
-  });
-});
-}
-// if you didn't receive a request with a comment
-      if (!req.body.comment) {
-        locationsFeatureCollection.features.forEach(function(feature) {
-          if (feature.properties.name === req.body.spot_name) {
-            featureSpot.features.push(feature);
-          }
-        });
+                knex('checkins')
+                  .then(function(results) {
+                    var checkins2;
+                    console.log(results, 'RESULTSSSSSSSSSSSSSSSSSSS')
+                    if (results) {
+                      knex('users')
+                      .join('checkins', 'users.id', 'checkins.user_id')
+                        .then(function(results) {
+                          console.log(results, 'CHECKINS2 RESULTS')
+                            checkins2 = results;
+                            console.log(checkins2, 'CHECKINS2222222')
+                            res.render('location', {
+                              user: req.session.passport.user,
+                              feature: featureSpotString,
+                              spot: spot,
+                              comments: comments,
+                              checkins: checkins2
+                            });
+                        })
 
-        let featureSpotString = JSON.stringify(featureSpot);
+                    } else {
+                      checkins2 = "";
+                    console.log(checkins2, 'CHECKINS FOR COMMENT')
+                    res.render('location', {
+                      user: req.session.passport.user,
+                      feature: featureSpotString,
+                      spot: spot,
+                      comments: comments,
+                      checkins: checkins2
+                    });
+                  }
+                  });
+              });
+          });
+      });
 
-        knex('spots').where('spot_name', req.body.spot_name)
-        .then(function (results) {
-          let spot = results;
+  }
 
-          knex('comments').where('spot_id', spot[0].id)
-          .then(function (results) {
-            console.log(results, 'ARE THERE RESULTS HERE')
-            console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
-            res.render('location', {user: req.session.passport.user, feature: featureSpotString, spot: spot, comments: results});
-          })
+  // if you didn't receive a request with a comment or a checkin request
+  if (!req.body.comment && !req.body.checkin && !req.body.upvote) {
 
-        });
+    locationsFeatureCollection.features.forEach(function(feature) {
+      if (feature.properties.name === req.body.spot_name) {
+        featureSpot.features.push(feature);
       }
+    });
+
+    let featureSpotString = JSON.stringify(featureSpot);
+
+    knex('spots').where('spot_name', req.body.spot_name)
+      .then(function(results) {
+        let spot = results;
+
+
+        knex('checkins')
+          .then(function(results) {
+
+
+              if (results) {
+                knex('users')
+                .join('checkins', 'users.id', 'checkins.user_id')
+                  .then(function(results) {
+                      checkins = results;
+                  })
+
+            } else {
+              checkins = "";
+            }
+
+            knex('comments').where('spot_id', spot[0].id)
+              .join('users', 'comments.user_id', 'users.id')
+              .then(function(results) {
+console.log(checkins, 'CHECKINS FOR NO COMMENT OR CHECKIN')
+                res.render('location', {
+                  user: req.session.passport.user,
+                  feature: featureSpotString,
+                  spot: spot,
+                  comments: results,
+                  checkins: checkins
+                });
+              })
+          })
+      });
+  }
+
+  // if you received a checkin request
+  if (req.body.checkin) {
+    console.log(req.body, 'REQUEST BODY OF THE CHECKIN')
+    return knex('checkins')
+      .insert({
+        user_id: req.session.passport.user[0].id,
+        spot_id: req.body.spot_id,
+        checkin: req.body.checkin
+      })
+      .then(function() {
+        knex('comments').where('spot_id', req.body.spot_id)
+          .join('users', 'comments.user_id', 'users.id')
+          .then(function(results) {
+            comments = results;
+
+            locationsFeatureCollection.features.forEach(function(feature) {
+              if (feature.properties.name === req.body.spot_name) {
+                featureSpot.features.push(feature);
+              }
+            });
+
+            let featureSpotString = JSON.stringify(featureSpot);
+
+            knex('spots').where('spot_name', req.body.spot_name)
+              .then(function(results) {
+                let spot = results;
+                console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+
+                knex('users')
+                .join('checkins', 'users.id', 'checkins.user_id')
+                  .then(function(results) {
+                    let checkins = results;
+
+console.log (checkins, 'CHECKIN FOR CHECKIN REQUEST')
+                    res.render('location', {
+                      user: req.session.passport.user,
+                      feature: featureSpotString,
+                      spot: spot,
+                      comments: comments,
+                      checkins: checkins
+                    });
+                  });
+              });
+          });
+      });
+
+
+
+
+
+
+
+
+
+  }
+
+
 });
 
 /*  ====================================================================
@@ -228,7 +399,9 @@ router.post('/location', isLoggedIn, function(req, res) {
 ====================================================================  */
 
 router.get('/success', isLoggedIn, function(req, res) {
-  res.render('success', {user: req.session.passport.user});
+  res.render('success', {
+    user: req.session.passport.user
+  });
 });
 
 /*  ====================================================================
@@ -238,7 +411,9 @@ router.get('/success', isLoggedIn, function(req, res) {
 router.get('/logout', function(req, res) {
   req.logout();
   console.log(req.session.passport, 'AFTER LOGOUT');
-  res.render('logout', {user: req.session.passport.user});
+  res.render('logout', {
+    user: req.session.passport.user
+  });
 });
 
 /*  ====================================================================
@@ -290,9 +465,9 @@ if login is correct then redirect to index if not go back to login screen
 ====================================================================  */
 
 router.post('/login', passport.authenticate('login', {
-  successRedirect : '/users/main',
+  successRedirect: '/users/main',
   failureRedirect: '/login',
-  failureFlash : true
+  failureFlash: true
 
 }));
 
@@ -302,7 +477,9 @@ router.post('/login', passport.authenticate('login', {
 
 router.get('/profile', isLoggedIn, function(req, res) {
 
-    res.render('profile', {user: req.session.passport.user});
+  res.render('profile', {
+    user: req.session.passport.user
+  });
 
 });
 
@@ -314,8 +491,8 @@ router.get('/profile', isLoggedIn, function(req, res) {
 function isLoggedIn(req, res, next) {
 
   //if user is authenticated in the session, cowabunga
-  if(req.isAuthenticated())
-  console.log(req.user, 'i am authenticated');
+  if (req.isAuthenticated())
+    console.log(req.user, 'i am authenticated');
   return next();
 
   // if they aren't redirect to login page
