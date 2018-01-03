@@ -114,23 +114,114 @@ router.post('/location', isLoggedIn, function(req, res) {
     "type": "FeatureCollection",
     "features": []
   };
+  var comments;
 
-  locationsFeatureCollection.features.forEach(function(feature) {
-    if (feature.properties.name === req.body.spot_name) {
-      featureSpot.features.push(feature);
-    }
-  });
+// if you received a post request with a comment
+  if (req.body.comment) {
+    return knex('comments')
+    .insert({
+      user_id : req.session.passport.user[0].id,
+      spot_id : req.body.spot_id,
+      comment: req.body.comment
+    })
+    .then(function () {
+      knex('comments').where('spot_id', req.body.spot_id)
+      .then(function (results) {
+        comments = results;
 
-  let featureSpotString = JSON.stringify(featureSpot);
+        locationsFeatureCollection.features.forEach(function(feature) {
+          if (feature.properties.name === req.body.spot_name) {
+            featureSpot.features.push(feature);
+          }
+        });
 
-  knex('spots').where('spot_name', req.body.spot_name)
-  .then(function (results) {
-    let spot = results;
-    console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+        let featureSpotString = JSON.stringify(featureSpot);
 
-    res.render('location', {user: req.session.passport.user, feature: featureSpotString, spot: spot});
+        knex('spots').where('spot_name', req.body.spot_name)
+        .then(function (results) {
+          let spot = results;
+          console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+
+          res.render('location', {user: req.session.passport.user, feature: featureSpotString, spot: spot, comments:comments});
+        });
   });
 });
+}
+// if you didn't receive a request with a comment
+      if (!req.body.comment) {
+        locationsFeatureCollection.features.forEach(function(feature) {
+          if (feature.properties.name === req.body.spot_name) {
+            featureSpot.features.push(feature);
+          }
+        });
+
+        let featureSpotString = JSON.stringify(featureSpot);
+
+        knex('spots').where('spot_name', req.body.spot_name)
+        .then(function (results) {
+          let spot = results;
+
+          knex('comments').where('spot_id', spot[0].id)
+          .then(function (results) {
+            console.log(results, 'ARE THERE RESULTS HERE')
+            console.log(featureSpotString, 'FEAUTREEEEEE YOU CLICKEDDDDDDDDDD');
+            res.render('location', {user: req.session.passport.user, feature: featureSpotString, spot: spot, comments: results});
+          })
+
+        });
+      }
+});
+
+/*  ====================================================================
+  get individual spot page with added comments/ add comments to database
+====================================================================  */
+
+// router.get('/location', isLoggedIn, function(req, res) {
+//   console.log(req.body, 'REQ BODY FROM GET LOCATION')
+//   return knex('comments')
+//   .insert({
+//     user_id : req.session.passport.user.id,
+//     spot_id : req.body.spot_id,
+//     comment: req.body.comment
+//   })
+//   .then(function () {
+//     knex('comments').where('spot_id', req.body.spot_id)
+//     .then(function (results) {
+//       let comments = results;
+//       res.render('location', {user:req.session.passport.user, comments:comments})
+//     })
+//   })
+//
+// })
+
+
+/*  ====================================================================
+      THIS IS TO TEST SO MAPBOX WONT BE MAD
+      DELETE ME LATER
+====================================================================  */
+
+// router.get('/location', isLoggedIn, function(req, res) {
+//   //map locations
+//   //let feature = JSON.stringify(locationsFeatureCollection);
+//
+//   let user = [ {
+//     id: 2,
+//     email: 'me2@gmail.com',
+//     full_name: 'me2',
+//     profile_photo: null } ]
+//
+//   let feature = [{
+//   "type":"Feature",
+//   "geometry":{
+//     "type":"Point",
+//     "coordinates":[-97.775916,30.22728]
+//   },
+//   "properties":{
+//     "address":"1077 W Ben White Blvd, Austin, Texas 78745, United States",
+//     "name":"Banister Ditch"}}]
+//   res.render('location', {user: user, feature: feature, spot: feature});
+// });
+
 
 /*  ====================================================================
       get test page to make sure sessions is working correctly

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<% inlcude partials/header %>
+<% include partials/header %>
   <body>
 
     <div class="container is-fluid">
@@ -8,27 +8,60 @@
 
         <!-- left colum -->
 
-        <div class="tile is-3 is-vertical is-parent">
-          <div class="tile is-child box">
-            <figure class="image is-2by3">
-              <img src= "<%= user[0].profile_photo %>"
+        <div class="tile is-4 is-vertical is-parent">
+          <div class="tile is-child box has-text-centered">
+            <figure class="image is-square">
+              <% if (user[0].profile_photo) { %>
+              <img src= "<%= user[0].profile_photo %>">
+              <% } else { %>
+              <img src= "../images/user.png">
+              <% } %>
             </figure>
+            <h1><%= user[0].full_name %></h1>
         </div>
           <div class="tile is-child box">
             <table class="table">
               <tr>
-                <td>Followers: <%=
+                <td>Followers: <!--number..link to show followers?-->
+                </td>
+                <td>Following: <!--number..is link to peeps followed?-->
+                </td>
+              </tr>
+              <tr>
+                <td>Stance:
+                </td>
+                <td>City:
+                </td>
+              </tr>
+              <tr>
+                <td>Favorite Spot:
                 </td>
               </tr>
             </table>
+          </div>
+          <div class="tile is-child box has-text-centered">
+            <h3>Sponsor Me</h3>
+            <div class="tile is-child box">
+            <figure class="is-96x96">
+              <img src="../images/skater.png">
+            </figure>
+            <p><a href="#">Photos</a></p>
+            </div>
+            <div class="tile is-child box has-text-centered">
+            <figure class="is-96x96">
+              <img src="../images/skater.png">
+            </figure>
+            <p><a href="#">Videos</a></p>
+            </div>
           </div>
         </div>
 
 
           <!-- right colum -->
 
-          <div class="tile is-9 is-vertical is-parent">
+          <div class="tile is-8 is-vertical is-parent">
             <div class="tile is-child box">
+              <h1>Shred Feed</h1>
             </div>
           </div>
 
