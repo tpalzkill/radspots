@@ -144,46 +144,17 @@ function viewAlbum(albumName) {
          'Back To Albums',
        '</button>',
      ]
-
-   // var mytemplatebitch = [
-//      '<h2>',
-//            'Album: ' + albumName,
-//          '</h2>',
-//          message,
-//          '<div>',
-//            getHtml(photos),
-//          '</div>',
-//          '<form>',
-//      '<div class="field">',
-//      '<div class="file">',
-//        '<label class="file-label"/>',
-//  '<input class="file-input" id="photoupload" accept="image/*" type="file" name="resume">',
-//  '<span id='filename' class="file-cta">',
-//    '<span class="file-icon">',
-//      '<i class="fa fa-upload"></i>',
-//    '</span>',
-//    '<span class="file-label">',
-//      'Choose a Profile Photo..',
-//    '</span>',
-//  '</span>',
-// '</label>',
-//      '</div>',
-//    '</div>'
-//    '<div class="control">'
-//      '<button id='submit_button' onclick="addPhoto(\'' + albumName +'\')" class="button is-success is-outlined is-focus" >create user</button>'
-//    '</div>'
-//
-//  '</form>'
-//  ]
    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
  });
 }
 
 function addPhoto(albumName) {
  var files = document.getElementById('photoupload').files;
+ alert(files);
  if (!files.length) {
    return alert('Please choose a file to upload first.');
  }
+
  var file = files[0];
  var fileName = file.name;
  var albumPhotosKey = encodeURIComponent(albumName) + '//';
@@ -195,9 +166,10 @@ function addPhoto(albumName) {
    ACL: 'public-read'
  }, function(err, data) {
    if (err) {
-     return alert('There was an error uploading your photo: ', err.message);
+     return alert('There was an error uploading your photo: ', fileName);
    }
    alert('Successfully uploaded photo.');
+   console.log(data.Location);
    viewAlbum(albumName);
  });
 }
