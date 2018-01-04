@@ -163,7 +163,7 @@ router.get('/signup', function(req, res) {
 ====================================================================  */
 
 router.post('/signup', (req, res, next) => {
-
+  console.log('Request body:', req.body);
   bcrypt.hash(req.body.password, 12)
     .then((hashed_password) => {
 
@@ -215,7 +215,9 @@ router.get('/profile', isLoggedIn, function(req, res) {
 
 });
 
-
+router.get('/photoupload', function(req, res) {
+  res.render('photoupload')
+})
 /*  ====================================================================
         route middleware function to make sure user is logged in
 ====================================================================  */

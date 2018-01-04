@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const port = process.env.PORT || 8000;
@@ -17,6 +18,19 @@ var flash = require('connect-flash');
 
 // HELP ME!
 // Configure our app with our settings.
+AWS.config.update({
+  accessKeyId: "AKIAJ2T4P4PLPEPN526Q",
+  secretAccessKey: "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",
+  region: 'us-west-1'});
+s3 = new AWS.S3({apiVersion: '2006-03-01'});
+var bucketParams = {Bucket: 'radspotsmedia'};
+s3.getBucketWebsite(bucketParams, function(err, data) {
+  if (err) {
+    console.log("Error", err);
+  } else if (data) {
+    console.log("Success", data);
+  }
+});
 
 // Tell our app where to find our views.
 app.set('views', './views');
