@@ -119,8 +119,11 @@ router.post('/location', isLoggedIn, function(req, res) {
   };
   var comments;
 
-console.log(req.body.upvote, 'REQ BODY UPVOTE')
+
+
+
   // if you received a upvote request
+
   if (req.body.upvote) {
     console.log('helloooooooooooooooooooooooooo')
     knex('spots').where('spot_name', req.body.spot_name)
@@ -131,8 +134,8 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
         .update({upvotes: upvoteVal + 1})
 
         .then(function() {
-          knex('comments').where('spot_id', req.body.spot_id)
-            .join('users', 'comments.user_id', 'users.id')
+          knex('users')
+          .join('comments', 'comments.user_id', 'users.id')
             .then(function(results) {
               comments = results;
 
@@ -172,6 +175,7 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
   }
 
   // if you received a post request with a comment
+
   if (req.body.comment) {
 
     let checkins2;
@@ -182,8 +186,8 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
         comment: req.body.comment
       })
       .then(function() {
-        knex('comments').where('spot_id', req.body.spot_id)
-          .join('users', 'comments.user_id', 'users.id')
+        knex('users')
+        .join('comments', 'comments.user_id', 'users.id')
           .then(function(results) {
             comments = results;
 
@@ -210,6 +214,7 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
                           console.log(results, 'CHECKINS2 RESULTS')
                             checkins2 = results;
                             console.log(checkins2, 'CHECKINS2222222')
+                            console.log(comments, 'COMMENTS IN THE COMMENT')
                             res.render('location', {
                               user: req.session.passport.user,
                               feature: featureSpotString,
@@ -237,7 +242,8 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
 
   }
 
-  // if you didn't receive a request with a comment or a checkin request
+  // if you didn't receive a request with a comment or a checkin request or upvote request
+
   if (!req.body.comment && !req.body.checkin && !req.body.upvote) {
 
     locationsFeatureCollection.features.forEach(function(feature) {
@@ -268,8 +274,8 @@ console.log(req.body.upvote, 'REQ BODY UPVOTE')
               checkins = "";
             }
 
-            knex('comments').where('spot_id', spot[0].id)
-              .join('users', 'comments.user_id', 'users.id')
+            knex('users')
+            .join('comments', 'comments.user_id', 'users.id')
               .then(function(results) {
 console.log(checkins, 'CHECKINS FOR NO COMMENT OR CHECKIN')
                 res.render('location', {
@@ -285,6 +291,7 @@ console.log(checkins, 'CHECKINS FOR NO COMMENT OR CHECKIN')
   }
 
   // if you received a checkin request
+
   if (req.body.checkin) {
     console.log(req.body, 'REQUEST BODY OF THE CHECKIN')
     return knex('checkins')
@@ -294,8 +301,8 @@ console.log(checkins, 'CHECKINS FOR NO COMMENT OR CHECKIN')
         checkin: req.body.checkin
       })
       .then(function() {
-        knex('comments').where('spot_id', req.body.spot_id)
-          .join('users', 'comments.user_id', 'users.id')
+        knex('users')
+        .join('comments', 'comments.user_id', 'users.id')
           .then(function(results) {
             comments = results;
 
@@ -477,12 +484,56 @@ router.post('/login', passport.authenticate('login', {
 
 router.get('/profile', isLoggedIn, function(req, res) {
 
-  res.render('profile', {
-    user: req.session.passport.user
-  });
+
+  knex('users').where('users.id', req.session.passport.user[0].id)
+    .join('comments', 'comments.user_id', 'users.id')
+    .join('spots', 'spots.id', 'comments.spot_id')
+    .then(function(results) {
+      let comments;
+      if (results) {
+        comments = results;
+      } else {
+        comments = ""
+      }
+
+    console.log(comments, 'COMMENTS FOR THE USER PROFILE PAGE')
+
+    knex('checkins').where('checkins.user_id', req.session.passport.user[0].id)
+    .join('spots', 'spots.id', 'checkins.spot_id')
+    .then(function(results){
+       let checkins;
+       if (results) {
+         checkins = results;
+       } else {
+         checkins = ""
+       }
+      console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE')
+      res.render('profile', {
+        user: req.session.passport.user,
+        comments: comments,
+        checkins: checkins
+      });
+    })
+
+  })
 
 });
 
+/*  ====================================================================
+                edit user profile page if logged in
+====================================================================  */
+
+router.post('/profile', isLoggedIn, function(req, res) {
+
+  return knex('users').where('users.id', req.session.passport.user[0].id)
+  .update({
+    email: req.body.email,
+    full_name: req.body.full_name,
+    profile_photo: req.body.profile_photo
+  })
+
+         res.render('saved')
+})
 
 /*  ====================================================================
         route middleware function to make sure user is logged in

@@ -1,78 +1,237 @@
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
+
 <% include partials/header %>
+
   <body>
+    <% include partials/nav %>
 
-    <div class="container is-fluid">
-      <div class="tile is-ancestor">
+      <div class="container is-fluid">
+        <div class="columns">
 
-        <!-- left colum -->
+          <!-- ***********************************************************
+                  left column
+************************************************************** -->
 
-        <div class="tile is-4 is-vertical is-parent">
-          <div class="tile is-child box has-text-centered">
-            <figure class="image is-square">
+          <aside class="column is-3 top-space has-text-centered">
+
+            <figure class="image is-1by2">
               <% if (user[0].profile_photo) { %>
-              <img src= "<%= user[0].profile_photo %>">
-              <% } else { %>
-              <img src= "../images/user.png">
-              <% } %>
+                <img src="<%= user[0].image %>">
+                <% } else { %>
+                  <img src="../images/user.png">
+                  <% } %>
             </figure>
-            <h1><%= user[0].full_name %></h1>
+            <p>
+              <h1 class="title is-3"><%= user[0].full_name %></h1>
+              <h1 class="subtitle is-6 grey"><%= user[0].email %></h1>
+            </p>
+            <!-- ***********************************************************
+                  user info
+************************************************************** -->
+
+
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Followers</p>
+                  <p class="title">
+                    followers
+                  </p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Following</p>
+                  <p class="title"> following </p>
+
+                </div>
+              </div>
+            </div>
+
+
+
+          </aside>
+
+          <!-- ***********************************************************
+          right column
+************************************************************** -->
+
+          <div class="column is-8 is-offset-1">
+
+
+            <div class="tabs is-left" id="nav-tabs">
+              <ul>
+                <a>
+                  <li id="photos">Photos</li>
+                </a>
+                <a>
+                  <li id="videos">Videos</li>
+                </a>
+                <a>
+                  <li id="feed">Feed</li>
+                </a>
+                <a>
+                  <li id="comments">Comments</li>
+                </a>
+                <a>
+                  <li id="edit">Edit</li>
+                </a>
+
+              </ul>
+            </div>
+
+
+            <!-- ***********************************************************
+          tab content to be displayed/hidden on click
+************************************************************** -->
+
+            <div class="get-content">
+              <div class="photos hidden">HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"</div>
+              <div class="videos hidden">HEYO THIS IS VIDEOS CONTENT"</div>
+
+
+              <!-- ***********************************************************
+                    tab content // show spot feed
+************************************************************** -->
+              <div class="feed hidden">
+                <% if (comments) { %>
+                  <% comments.forEach(function(comment) { %>
+
+                    <div class="tile is-ancestor">
+                      <div class="tile is-parent is-vertical is-8">
+                        <div class="tile box is-child">
+                          <h3 class="title is-5">
+                          Commented on <%= comment.spot_name %>
+                    </h3>
+                          <h3 class="subtitle is-6 grey">
+                      <%= comment.updated_at %>
+                    </h3>
+                          <p>
+                            <%= comment.comment %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <%  })  %>
+                      <%  }  %>
+
+
+
+
+
+
+
+                        <% if (checkins) { %>
+                          <% checkins.forEach(function(checkin) { %>
+
+                            <div class="tile is-ancestor">
+                              <div class="tile is-parent is-vertical is-8">
+                                <div class="tile box is-child">
+                                  <h3 class="title is-5">
+                      Checked in at <%= checkin.spot_name %>
+                      <p><h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
+
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <%  })  %>
+                              <%  }  %>
+
+
+
+
+
+              </div>
+
+
+
+              <!-- ***********************************************************
+                tab content // show comments
+************************************************************** -->
+              <div class="comments hidden">
+                <% if (comments) { %>
+                  <% comments.forEach(function(comment) { %>
+
+                    <div class="tile is-ancestor">
+                      <div class="tile is-parent is-vertical is-8">
+                        <div class="tile box is-child">
+                          <h3 class="title is-5">
+                          Commented on <%= comment.spot_name %>
+                    </h3>
+                          <h3 class="subtitle is-6 grey">
+                      <%= comment.updated_at %>
+                    </h3>
+                          <p>
+                            <%= comment.comment %>
+                        </div>
+                      </div>
+                    </div>
+                    <%  })  %>
+                      <%  }  %>
+              </div>
+
+              <!-- ***********************************************************
+              tab content // show edit form
+************************************************************** -->
+
+              <div class="edit hidden">
+                <form class="" action="/users/profile" method="post">
+                  <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                    <input class="input" type="text" id='full_name' name="full_name" value="<%= user[0].full_name %>"/>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                    <input class="input" type="email" id="email" name="email" value="<%= user[0].email %>" multiple/>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="file">
+              <label class="file-label">
+                <input class="file-input" type="file" name="resume">
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fa fa-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose a Profile Photo..
+                  </span>
+                </span>
+              </label>
+            </div>
+                  </div>
+
+            <div class="control">
+              <button class="button is-success is-outlined is-focus" type="submit">Submit Changes</button>
+            </div>
+
+                </form>
+
+
+              </div>
+
+
+
+
+
+            </div>
+
+          </div>
+
+
+
         </div>
-          <div class="tile is-child box">
-            <table class="table">
-              <tr>
-                <td>Followers: <!--number..link to show followers?-->
-                </td>
-                <td>Following: <!--number..is link to peeps followed?-->
-                </td>
-              </tr>
-              <tr>
-                <td>Stance:
-                </td>
-                <td>City:
-                </td>
-              </tr>
-              <tr>
-                <td>Favorite Spot:
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="tile is-child box has-text-centered">
-            <h3>Sponsor Me</h3>
-            <div class="tile is-child box">
-            <figure class="is-96x96">
-              <img src="../images/skater.png">
-            </figure>
-            <p><a href="#">Photos</a></p>
-            </div>
-            <div class="tile is-child box has-text-centered">
-            <figure class="is-96x96">
-              <img src="../images/skater.png">
-            </figure>
-            <p><a href="#">Videos</a></p>
-            </div>
-          </div>
-        </div>
-
-
-          <!-- right colum -->
-
-          <div class="tile is-8 is-vertical is-parent">
-            <div class="tile is-child box">
-              <h1>Shred Feed</h1>
-            </div>
-          </div>
-
-
-
-
-
       </div>
-    </div>
 
 
-    <% include partials/footer %>
+
+      <% include partials/footer %>
   </body>
+
 </html>
