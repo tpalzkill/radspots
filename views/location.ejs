@@ -124,9 +124,6 @@
 
 
 
-
-
-
           <!-- ***********************************************************
                   left column map tile
 ************************************************************** -->
@@ -134,15 +131,15 @@
             <div class="tile is-parent">
               <div class="tile is-child  bgwhite box">
                 <!-- map styles to be moved to css -->
-                <div id="map" class="map-single">  </div>
+                <div id="map" class="map-single"> </div>
                 <p class="subtitle is-6">
                   <%= spot[0].spot_location %>
                 </p>
 
-                  <!-- reassign feature variable passed in to points variable so it can be accessed in script tags below -->
-                  <script>
-                    var points = <%- feature %>
-                  </script>
+                <!-- reassign feature variable passed in to points variable so it can be accessed in script tags below -->
+                <script>
+                  var points = <%- feature %>
+                </script>
 
 
 
@@ -219,35 +216,38 @@
 
         <div class="column is-8">
 
-          <div class="tile is-ancestor fixed">
+          <div class="tile is-ancestor fixed is-8">
             <div class="tile is-parent">
               <div class="tile is-child  bgwhite box">
-          <div class="tabs is-left" id="nav-tabs">
-            <ul>
-              <a>
-                <li id="photos">Photos</li>
-              </a>
-              <a>
-                <li id="videos">Videos</li>
-              </a>
-              <a>
-                <li id="checkins">Checkins</li>
-              </a>
-              <a>
-                <li id="feed">Feed</li>
-              </a>
-              <a>
-                <li id="add-comment">Speak</li>
-              </a>
-              <a>
-                <li id="comments">Comments</li>
-              </a>
+                <div class="tabs is-left" id="nav-tabs">
+                  <ul>
+                    <a>
+                      <li id="photos">Photos</li>
+                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-photo"></i></li>
+                    </a>
 
-            </ul>
+
+
+                    <a>
+                      <li id="videos">Videos</li>
+                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-video"></i></li>
+                    </a>
+                    <a>
+                      <li id="checkins">Checkins</li>
+                    </a>
+                    <a>
+                      <li id="feed">Feed</li>
+                    </a>
+                    <a>
+                      <li id="comments">Comments</li>
+                          <li><i class="fa fa-plus" aria-hidden="true"  id="add-comment"></i></li>
+                    </a>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-</div>
-</div>
-</div>
 
           <!-- ***********************************************************
           tab content to be displayed/hidden on click
@@ -259,11 +259,11 @@
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">
-              HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"
+                    HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
 
 
@@ -271,11 +271,11 @@
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">
-              HEYO THIS IS VIDEOS CONTENT"
+                    HEYO THIS IS VIDEOS CONTENT"
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
             <!-- ***********************************************************
               tab content // show checkins
@@ -286,7 +286,7 @@
                 <% checkins.forEach(function(checkin) { %>
                   <% if (checkin.spot_id === spot[0].id) { %>
                     <div class="tile is-ancestor">
-                      <div class="tile is-parent is-vertical is-8">
+                      <div class="tile is-parent is-vertical">
                         <div class="tile box is-child bgwhite">
                           <h3 class="title is-5">
 
@@ -312,7 +312,7 @@
               <% comments.forEach(function(comment) { %>
                 <% if (comment.spot_id === spot[0].id) { %>
                   <div class="tile is-ancestor">
-                    <div class="tile is-parent is-vertical is-8">
+                    <div class="tile is-parent is-vertical">
                       <div class="tile box is-child bgwhite">
                         <h3 class="title is-5">
 
@@ -340,7 +340,7 @@
                         <% checkins.forEach(function(checkin) { %>
                           <% if (checkin.spot_id === spot[0].id) { %>
                             <div class="tile is-ancestor">
-                              <div class="tile is-parent is-vertical is-8">
+                              <div class="tile is-parent is-vertical">
                                 <div class="tile box is-child bgwhite">
                                   <h3 class="title is-5">
 
@@ -372,27 +372,27 @@
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">
-              <form class="" action="/users/location" method="post">
+                    <form class="" action="/users/location" method="post">
 
-                <div class="field">
-                  <label class="label"><%= user[0].full_name %>, what are your thoughts?</label>
-                  <div class="control">
-                    <textarea class="textarea" id="comment" name="comment" placeholder="Comments..."></textarea>
-                    <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
-                    <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                      <div class="field">
+                        <label class="label"><%= user[0].full_name %>, what are your thoughts?</label>
+                        <div class="control">
+                          <textarea class="textarea" id="comment" name="comment" placeholder="Comments..."></textarea>
+                          <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                          <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                        </div>
+                      </div>
+
+
+                      <div class="control">
+                        <button class="button is-primary is-outlined is-focus" type="submit">Add Comment</button>
+                      </div>
+
+                    </form>
                   </div>
                 </div>
-
-
-                <div class="control">
-                  <button class="button is-success is-outlined is-focus" type="submit">Add Comment</button>
-                </div>
-
-              </form>
+              </div>
             </div>
-</div>
-</div>
-</div>
             <!-- ***********************************************************
                 tab content // show comments
 ************************************************************** -->
@@ -401,7 +401,7 @@
               <% comments.forEach(function(comment) { %>
                 <% if (comment.spot_id === spot[0].id) { %>
                   <div class="tile is-ancestor">
-                    <div class="tile is-parent is-vertical is-8">
+                    <div class="tile is-parent is-vertical">
                       <div class="tile box is-child bgwhite">
                         <h3 class="title is-5">
 

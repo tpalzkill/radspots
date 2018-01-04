@@ -401,15 +401,7 @@ console.log (checkins, 'CHECKIN FOR CHECKIN REQUEST')
 // });
 
 
-/*  ====================================================================
-      get test page to make sure sessions is working correctly
-====================================================================  */
 
-router.get('/success', isLoggedIn, function(req, res) {
-  res.render('success', {
-    user: req.session.passport.user
-  });
-});
 
 /*  ====================================================================
         get logout page when user ends their session
@@ -451,7 +443,7 @@ router.post('/signup', (req, res, next) => {
     .then((users) => {
       const user = users[0];
       delete user.hashed_password;
-      res.send(user);
+      res.render('created');
     })
     .catch((err) => {
       next(err);
@@ -519,21 +511,58 @@ router.get('/profile', isLoggedIn, function(req, res) {
 
 });
 
+
+
+/*  ====================================================================
+              get success after user updates profile
+====================================================================  */
+
+router.get('/success', function(req, res) {
+  res.render('success')
+})
+
+
 /*  ====================================================================
                 edit user profile page if logged in
 ====================================================================  */
 
-router.post('/profile', isLoggedIn, function(req, res) {
-
-  return knex('users').where('users.id', req.session.passport.user[0].id)
+router.post('/success', function(req, res) {
+console.log(req.body, 'WHAT IS HAPPENINGGGGGGGGGGGGG')
+  return knex('users').where('users.id', req.body.id)
   .update({
     email: req.body.email,
     full_name: req.body.full_name,
     profile_photo: req.body.profile_photo
   })
+  .then(function (results) {
+    req.logout();
+    console.log(req.session.passport, 'AFTER LOGOUT');
+     res.render('success')
+  })
 
-         res.render('saved')
 })
+
+
+/*  ====================================================================
+                list all users
+====================================================================  */
+
+router.get('/list', function(req, res) {
+  knex('users').whereNot('id', req.session.passport.user[0].id)
+  .then(function(results) {
+    res.render('list', {
+      user: req.session.passport.user,
+      users: results
+    })
+
+  })
+
+})
+
+
+
+
+
 
 /*  ====================================================================
         route middleware function to make sure user is logged in

@@ -6,194 +6,236 @@
   <body>
     <% include partials/nav %>
 
-      <div class="container is-fluid">
-        <div class="columns">
+      <!-- <div class="container is-fluid"> -->
+      <div class="columns">
 
-          <!-- ***********************************************************
+        <!-- ***********************************************************
                   left column
 ************************************************************** -->
 
-          <aside class="column is-3 top-space has-text-centered">
-
-            <figure class="image is-1by2">
-              <% if (user[0].profile_photo) { %>
-                <img src="<%= user[0].image %>">
-                <% } else { %>
-                  <img src="../images/user.png">
-                  <% } %>
-            </figure>
-            <p>
-              <h1 class="title is-3"><%= user[0].full_name %></h1>
-              <h1 class="subtitle is-6 grey"><%= user[0].email %></h1>
-            </p>
-            <!-- ***********************************************************
-                  user info
-************************************************************** -->
+        <div class="column is-3 top-space">
 
 
-            <div class="level">
-              <div class="level-item has-text-centered">
-                <div>
-                  <p class="heading">Followers</p>
-                  <p class="title">
-                    followers
-                  </p>
-                </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box has-text-centered">
+
+                <figure class="image is-1by2">
+                  <% if (user[0].profile_photo) { %>
+                    <img src="<%= user[0].image %>">
+                    <% } else { %>
+                      <img src="../images/user.png">
+                      <% } %>
+                </figure>
+                <p>
+                  <h1 class="title is-3"><%= user[0].full_name %></h1>
+                  <h1 class="subtitle is-6 grey"><%= user[0].email %></h1>
+                </p>
+
               </div>
-              <div class="level-item has-text-centered">
-                <div>
-                  <p class="heading">Following</p>
-                  <p class="title"> following </p>
+            </div>
+          </div>
 
+
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+
+                <div class="level">
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Followers</p>
+                      <p class="title">
+                        followers
+                      </p>
+                    </div>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Following</p>
+                      <p class="title"> following </p>
+
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
 
+        </div>
 
-          </aside>
-
-          <!-- ***********************************************************
+        <!-- ***********************************************************
           right column
 ************************************************************** -->
 
-          <div class="column is-8 is-offset-1">
+        <div class="column is-8">
+
+          <div class="tile is-ancestor fixed is-8">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+
+                <div class="tabs is-left" id="nav-tabs">
+                  <ul>
+                    <a>
+                      <li id="photos">Photos</li>
+                    </a>
+                    <a>
+                      <li id="videos">Videos</li>
+                    </a>
+                    <a>
+                      <li id="feed">Feed</li>
+                    </a>
+                    <a>
+                      <li id="comments">Comments</li>
+                    </a>
+                    <a>
+                      <li id="edit">Edit</li>
+                    </a>
+
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- ***********************************************************
+          tab content to be displayed/hidden on click
+************************************************************** -->
+
+          <div class="get-content">
+
+            <div class="photos top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-            <div class="tabs is-left" id="nav-tabs">
-              <ul>
-                <a>
-                  <li id="photos">Photos</li>
-                </a>
-                <a>
-                  <li id="videos">Videos</li>
-                </a>
-                <a>
-                  <li id="feed">Feed</li>
-                </a>
-                <a>
-                  <li id="comments">Comments</li>
-                </a>
-                <a>
-                  <li id="edit">Edit</li>
-                </a>
 
-              </ul>
+            <div class="videos top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    HEYO THIS IS VIDEOS CONTENT"
+                  </div>
+                </div>
+              </div>
             </div>
 
 
             <!-- ***********************************************************
-          tab content to be displayed/hidden on click
+                    tab content // show user feed
 ************************************************************** -->
+            <div class="feed top-space-lg hidden">
+              <% if (comments) { %>
+                <% comments.forEach(function(comment) { %>
 
-            <div class="get-content">
-              <div class="photos hidden">HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"</div>
-              <div class="videos hidden">HEYO THIS IS VIDEOS CONTENT"</div>
-
-
-              <!-- ***********************************************************
-                    tab content // show spot feed
-************************************************************** -->
-              <div class="feed hidden">
-                <% if (comments) { %>
-                  <% comments.forEach(function(comment) { %>
-
-                    <div class="tile is-ancestor">
-                      <div class="tile is-parent is-vertical is-8">
-                        <div class="tile box is-child">
-                          <h3 class="title is-5">
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent">
+                      <div class="tile is-child bgwhite box">
+                        <h3 class="title is-5">
                           Commented on <%= comment.spot_name %>
                     </h3>
-                          <h3 class="subtitle is-6 grey">
+                        <h3 class="subtitle is-6 grey">
                       <%= comment.updated_at %>
                     </h3>
-                          <p>
-                            <%= comment.comment %>
-                        </div>
+                        <p>
+                          <%= comment.comment %>
                       </div>
                     </div>
+                  </div>
 
-                    <%  })  %>
-                      <%  }  %>
-
-
-
+                  <%  })  %>
+                    <%  }  %>
 
 
 
 
-                        <% if (checkins) { %>
-                          <% checkins.forEach(function(checkin) { %>
 
-                            <div class="tile is-ancestor">
-                              <div class="tile is-parent is-vertical is-8">
-                                <div class="tile box is-child">
-                                  <h3 class="title is-5">
+
+
+                      <% if (checkins) { %>
+                        <% checkins.forEach(function(checkin) { %>
+
+                          <div class="tile is-ancestor">
+                            <div class="tile is-parent">
+                              <div class="tile is-child bgwhite box">
+                                <h3 class="title is-5">
                       Checked in at <%= checkin.spot_name %>
                       <p><h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
 
 
-                                </div>
                               </div>
                             </div>
+                          </div>
 
-                            <%  })  %>
-                              <%  }  %>
-
-
-
-
-
-              </div>
+                          <%  })  %>
+                            <%  }  %>
 
 
 
-              <!-- ***********************************************************
-                tab content // show comments
+
+
+            </div>
+
+
+
+            <!-- ***********************************************************
+                tab content // show user comments
 ************************************************************** -->
-              <div class="comments hidden">
-                <% if (comments) { %>
-                  <% comments.forEach(function(comment) { %>
+            <div class="comments top-space-lg hidden">
+              <% if (comments) { %>
+                <% comments.forEach(function(comment) { %>
 
-                    <div class="tile is-ancestor">
-                      <div class="tile is-parent is-vertical is-8">
-                        <div class="tile box is-child">
-                          <h3 class="title is-5">
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent">
+                      <div class="tile is-child bgwhite box">
+                        <h3 class="title is-5">
                           Commented on <%= comment.spot_name %>
                     </h3>
-                          <h3 class="subtitle is-6 grey">
+                        <h3 class="subtitle is-6 grey">
                       <%= comment.updated_at %>
                     </h3>
-                          <p>
-                            <%= comment.comment %>
-                        </div>
+                        <p>
+                          <%= comment.comment %>
                       </div>
                     </div>
-                    <%  })  %>
-                      <%  }  %>
-              </div>
+                  </div>
+                  <%  })  %>
+                    <%  }  %>
+            </div>
 
-              <!-- ***********************************************************
+            <!-- ***********************************************************
               tab content // show edit form
 ************************************************************** -->
 
-              <div class="edit hidden">
-                <form class="" action="/users/profile" method="post">
-                  <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                    <input class="input" type="text" id='full_name' name="full_name" value="<%= user[0].full_name %>"/>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                    <input class="input" type="email" id="email" name="email" value="<%= user[0].email %>" multiple/>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="file">
-              <label class="file-label">
+            <div class="edit top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child bgwhite box">
+
+                    <form class="" action="/users/success" method="post">
+                      <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control">
+                          <input class="input" type="text" id="full_name" name="full_name" value="<%= user[0].full_name %>" />
+                            <input type="hidden" name="id" value="<%=user[0].id %>">
+                        </div>
+                      </div>
+                      <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                          <input class="input" type="email" id="email" name="email" value="<%= user[0].email %>" multiple/>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="file">
+                          <label class="file-label">
                 <input class="file-input" type="file" name="resume">
                 <span class="file-cta">
                   <span class="file-icon">
@@ -204,30 +246,32 @@
                   </span>
                 </span>
               </label>
-            </div>
+                        </div>
+                      </div>
+
+                      <div class="control">
+                        <button class="button is-primary is-outlined is-focus" type="submit">Submit Changes</button>
+                      </div>
+
+                    </form>
+
+
                   </div>
-
-            <div class="control">
-              <button class="button is-success is-outlined is-focus" type="submit">Submit Changes</button>
-            </div>
-
-                </form>
-
-
+                </div>
               </div>
-
-
-
-
-
             </div>
+
+
+
 
           </div>
 
-
-
         </div>
+
+
+
       </div>
+      <!-- </div> -->
 
 
 
