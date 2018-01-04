@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/mawarren85/radspots#readme",
   "dependencies": {
+    "aws": "0.0.3-2",
+    "aws-sdk": "^2.176.0",
     "bcrypt-as-promised": "^1.1.0",
     "body-parser": "^1.18.2",
     "bulma": "^0.6.1",
@@ -32,6 +34,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "sdk": "^0.5.0"
   }
 }

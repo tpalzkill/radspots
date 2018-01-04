@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt-as-promised');
 var config = require('../knexfile')['development'];
 var knex = require('knex')(config);
 const passport = require('passport');
+var url = require('url');
 
 /*  ====================================================================
                 mapbox setup
@@ -510,6 +511,67 @@ router.get('/profile', isLoggedIn, function(req, res) {
   })
 
 });
+
+
+/*  ====================================================================
+                upload user profile picture
+====================================================================  */
+router.post('/profile', function(req, res) {
+  console.log(req.body.url, 'HELLLOOOOOOOOOOOOOOOOOOOOOOOOOO');
+let url = req.body.url
+
+  req.session.passport.user.profile_photo = url
+  req.save();
+
+
+
+console.log(req.session.passport.user, 'SHOULD BE UPDATED USERRRRRRR')
+  return knex('users').where('id', req.session.passport.user[0].id)
+  .update('profile_photo', url)
+  .then(function() {
+    knex('users').where('users.id', req.session.passport.user[0].id)
+      .join('comments', 'comments.user_id', 'users.id')
+      .join('spots', 'spots.id', 'comments.spot_id')
+      .then(function(results) {
+        let comments;
+        if (results) {
+          comments = results;
+        } else {
+          comments = ""
+        }
+
+    //  console.log(comments, 'COMMENTS FOR THE USER PROFILE PAGE')
+
+      knex('checkins').where('checkins.user_id', req.session.passport.user[0].id)
+      .join('spots', 'spots.id', 'checkins.spot_id')
+      .then(function(results){
+         let checkins;
+         if (results) {
+           checkins = results;
+         } else {
+           checkins = ""
+         }
+        //console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE')
+        res.render('profile', {
+          user: req.session.passport.user,
+          comments: comments,
+          checkins: checkins
+
+        });
+      })
+
+    })
+
+
+
+
+  })
+
+
+
+
+
+})
 
 
 

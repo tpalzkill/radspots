@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const port = process.env.PORT || 8000;
@@ -14,6 +15,7 @@ var localStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+
 
 // HELP ME!
 // Configure our app with our settings.

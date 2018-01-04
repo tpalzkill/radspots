@@ -22,7 +22,7 @@
 
                 <figure class="image is-1by2">
                   <% if (user[0].profile_photo) { %>
-                    <img src="<%= user[0].image %>">
+                    <img src="<%= user[0].profile_photo %>">
                     <% } else { %>
                       <img src="../images/user.png">
                       <% } %>
@@ -31,6 +31,31 @@
                   <h1 class="title is-3"><%= user[0].full_name %></h1>
                   <h1 class="subtitle is-6 grey"><%= user[0].email %></h1>
                 </p>
+
+                <!-- ***********************************************************
+                        upload photo
+        ************************************************************** -->
+
+                <div class="field">
+                  <div class="file">
+                    <label class="file-label">
+                      <input class="file-input" id="photoupload" type="file" name="resume">
+                      <span id="filename" class="file-cta">
+                        <span class="file-icon">
+                          <i class="fa fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Choose a Photo...
+                        </span>
+                      </span>
+                    </label>
+                  </div>
+
+                  <button class="button" id="addphoto" onclick="addPhoto('media')">
+                    'Add Photo'
+                  </button>
+                </div>
+
 
               </div>
             </div>
@@ -146,6 +171,7 @@
                     </h3>
                         <p>
                           <%= comment.comment %>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -166,8 +192,9 @@
                             <div class="tile is-parent">
                               <div class="tile is-child bgwhite box">
                                 <h3 class="title is-5">
-                      Checked in at <%= checkin.spot_name %>
-                      <p><h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
+                      Checked in at <%= checkin.spot_name %></h3>
+                                <p>
+                                  <h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
 
 
                               </div>
@@ -203,6 +230,7 @@
                     </h3>
                         <p>
                           <%= comment.comment %>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -224,7 +252,7 @@
                         <label class="label">Name</label>
                         <div class="control">
                           <input class="input" type="text" id="full_name" name="full_name" value="<%= user[0].full_name %>" />
-                            <input type="hidden" name="id" value="<%=user[0].id %>">
+                          <input type="hidden" name="id" value="<%=user[0].id %>">
                         </div>
                       </div>
                       <div class="field">
