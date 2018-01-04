@@ -1,46 +1,3 @@
-// $.ajax({
-//     'type':'GET',
-//     'url':'https://s3-us-west-1.amazonaws.com/radspotsmedia/sO-67NimQbbq5E4HZQuEVPTmJ2F36b0NAYtGh30Tevk.jpg',
-//     'success':function(msg) {
-//         alert(msg);
-//     }
-//
-// });
-// var upload_file = function(path,file_field) {
-//     var file = file_field[0].files[0];
-//     var fd = new FormData();
-//     fd.append('key', file.name);
-//     fd.append('acl', 'bucket-owner-full-control');
-//     fd.append('Content-Type', file.type);
-//     fd.append("file",file);
-//
-//
-//     return $.ajax({
-//         type : 'POST',
-//         url : path,
-//         data : fd,
-//         processData: false,  // Don't process the data
-//         contentType: false,  // Don't set contentType
-//         success: function(json) { console.log('Upload complete!') },
-//         error: function (XMLHttpRequest, textStatus, errorThrown) {
-//             alert('Upload error: ' + XMLHttpRequest.responseText);
-//         }
-//     });
-// };
-//
-//
-//
-// file.onchange = function(){
-//     if(file.files.length > 0)
-//     {
-//
-//       document.getElementById('filename').innerHTML = 					file.files[0].name;
-// upload_file('http://radspotsmedia.s3-website-us-west-1.amazonaws.com',file)
-//     }
-// };
-
-// HELP ME!
-// Configure our app with our settings.
 console.log('Am I even loading???')
 var albumBucketName = 'radspotsmedia';
 var bucketRegion = 'us-east-2';
@@ -142,9 +99,9 @@ function viewAlbum(albumName) {
            '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
          '</div>',
          '<div>',
-           '<span onclick="deletePhoto(\'' + albumName + "','" + photoKey + '\')">',
+           '<button class="button" onclick="deletePhoto(\'' + albumName + "','" + photoKey + '\')">',
              'X',
-           '</span>',
+           '</button>',
            '<span>',
              photoKey.replace(albumPhotosKey, ''),
            '</span>',
@@ -156,21 +113,67 @@ function viewAlbum(albumName) {
      '<p>Click on the X to delete the photo</p>' :
      '<p>You do not have any photos in this album. Please add photos.</p>';
    var htmlTemplate = [
-     '<h2>',
-       'Album: ' + albumName,
-     '</h2>',
-     message,
-     '<div>',
-       getHtml(photos),
-     '</div>',
-     '<input id="photoupload" type="file" accept="image/*">',
-     '<button id="addphoto" onclick="addPhoto(\'' + albumName +'\')">',
-       'Add Photo',
-     '</button>',
-     '<button onclick="listAlbums()">',
-       'Back To Albums',
-     '</button>',
-   ]
+       '<h2>',
+         'Album: ' + albumName,
+       '</h2>',
+       message,
+       '<div>',
+         getHtml(photos),
+       '</div>',
+       // '<input id="photoupload" type="file" accept="image/*">',
+       '<div class="field">',
+            '<div class="file">',
+              '<label class="file-label">',
+        '<input class="file-input" id="photoupload" accept="image/*" type="file" name="resume">',
+        '<span id="filename" class="file-cta">',
+          '<span class="file-icon">',
+            '<i class="fa fa-upload"></i>',
+          '</span>',
+          '<span class="file-label">',
+            'Choose a Profile Photo..',
+          '</span>',
+        '</span>',
+       '</label>',
+            '</div>',
+          '</div>',
+       '<button class="button" id="addphoto" onclick="addPhoto(\'' + albumName +'\')">',
+         'Add Photo',
+       '</button>',
+       '<button class="button" onclick="listAlbums()">',
+         'Back To Albums',
+       '</button>',
+     ]
+
+   // var mytemplatebitch = [
+//      '<h2>',
+//            'Album: ' + albumName,
+//          '</h2>',
+//          message,
+//          '<div>',
+//            getHtml(photos),
+//          '</div>',
+//          '<form>',
+//      '<div class="field">',
+//      '<div class="file">',
+//        '<label class="file-label"/>',
+//  '<input class="file-input" id="photoupload" accept="image/*" type="file" name="resume">',
+//  '<span id='filename' class="file-cta">',
+//    '<span class="file-icon">',
+//      '<i class="fa fa-upload"></i>',
+//    '</span>',
+//    '<span class="file-label">',
+//      'Choose a Profile Photo..',
+//    '</span>',
+//  '</span>',
+// '</label>',
+//      '</div>',
+//    '</div>'
+//    '<div class="control">'
+//      '<button id='submit_button' onclick="addPhoto(\'' + albumName +'\')" class="button is-success is-outlined is-focus" >create user</button>'
+//    '</div>'
+//
+//  '</form>'
+//  ]
    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
  });
 }
@@ -228,6 +231,50 @@ function deleteAlbum(albumName) {
    });
  });
 }
+// $.ajax({
+//     'type':'GET',
+//     'url':'https://s3-us-west-1.amazonaws.com/radspotsmedia/sO-67NimQbbq5E4HZQuEVPTmJ2F36b0NAYtGh30Tevk.jpg',
+//     'success':function(msg) {
+//         alert(msg);
+//     }
+//
+// });
+// var upload_file = function(path,file_field) {
+//     var file = file_field[0].files[0];
+//     var fd = new FormData();
+//     fd.append('key', file.name);
+//     fd.append('acl', 'bucket-owner-full-control');
+//     fd.append('Content-Type', file.type);
+//     fd.append("file",file);
+//
+//
+//     return $.ajax({
+//         type : 'POST',
+//         url : path,
+//         data : fd,
+//         processData: false,  // Don't process the data
+//         contentType: false,  // Don't set contentType
+//         success: function(json) { console.log('Upload complete!') },
+//         error: function (XMLHttpRequest, textStatus, errorThrown) {
+//             alert('Upload error: ' + XMLHttpRequest.responseText);
+//         }
+//     });
+// };
+//
+//
+//
+// file.onchange = function(){
+//     if(file.files.length > 0)
+//     {
+//
+//       document.getElementById('filename').innerHTML = 					file.files[0].name;
+// upload_file('http://radspotsmedia.s3-website-us-west-1.amazonaws.com',file)
+//     }
+// };
+
+// HELP ME!
+// Configure our app with our settings.
+
 // AWS.config.update({
 //   accessKeyId: "AKIAJ2T4P4PLPEPN526Q",
 //   secretAccessKey: "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",
