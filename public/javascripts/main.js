@@ -95,8 +95,9 @@ function viewAlbum(albumName) {
      var photoUrl = bucketUrl + encodeURIComponent(photoKey);
      return getHtml([
        '<span>',
-         '<div>',
-           '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
+         '<figure class="image is-128x128">',
+           '<img src="' + photoUrl + '"/>',
+           '</figure>',
          '</div>',
          '<div>',
            '<button class="button" onclick="deletePhoto(\'' + albumName + "','" + photoKey + '\')">',
