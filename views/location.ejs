@@ -223,14 +223,12 @@
                   <ul>
                     <a>
                       <li id="photos">Photos</li>
-                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-photo"></i></li>
+                      <li class="left-space"><i class="fa fa-plus" aria-hidden="true" id="add-photo"></i></li>
                     </a>
-
-
 
                     <a>
                       <li id="videos">Videos</li>
-                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-video"></i></li>
+                      <li class="left-space"><i class="fa fa-plus" aria-hidden="true" id="add-video"></i></li>
                     </a>
                     <a>
                       <li id="checkins">Checkins</li>
@@ -240,7 +238,7 @@
                     </a>
                     <a>
                       <li id="comments">Comments</li>
-                          <li><i class="fa fa-plus" aria-hidden="true"  id="add-comment"></i></li>
+                      <li class="left-space"><i class="fa fa-plus" aria-hidden="true" id="add-comment"></i></li>
                     </a>
 
                   </ul>
@@ -253,81 +251,170 @@
           tab content to be displayed/hidden on click
 ************************************************************** -->
 
-
-
-
-
-
           <div class="get-content">
 
-            <div class="photos top-space-lg hidden">
-              <div class="tile is-ancestor">
-                <div class="tile is-parent">
-                  <div class="tile is-child  bgwhite box">
+          <!-- ***********************************************************
+                    tab content // show add photo
+  ************************************************************** -->
 
-                    <% if (photos) { %>
-                      <% photos.forEach(function(photo) { %>
-                        <% if (photo.spot_id === spot[0].id) { %>
-                          <div class="tile is-ancestor">
-                            <div class="tile is-parent is-vertical">
-                              <div class="tile box is-child bgwhite">
-                                <figure class="image is-1by2">
-
-                                    <img src="<%= photo.photo %>">
-
-
-                                </figure>
-
-                              </div>
-                            </div>
-                          </div>
-                          <%  }  %>
-                            <%  })  %>
-                              <%  }  %>
+          <div class="add-photo top-space-lg hidden" id="getPhotoForm">
+            <div class="tile is-ancestor">
+              <div class="tile is-parent">
+                <div class="tile is-child  bgwhite box">
+                  <div class="field">
+                    <div class="file">
+                      <label class="file-label">
+                    <input class="file-input" id="spotphotoupload" type="file" name="resume">
+                    <span id="filename" class="file-cta">
+                      <span class="file-icon">
+                        <i class="fa fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Choose a Photo...
+                      </span>
+                    </span>
+                  </label>
+                    </div>
+                    <div id="hidden-spot-id" class="hidden">
+                      <%= spot[0].id %>
+                    </div>
+                    <div id="hidden-user-id" class="hidden">
+                      <%= user[0].id %>
+                    </div>
+                    <div id="hidden-user-name" class="hidden">
+                      <%= user[0].full_name %>
+                    </div>
+                    <button class="button is-outlined is-primary is-focused" id="addphoto" onclick="addPhoto('media')">
+                  Add Photo
+                </button>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-
-
-            <div class="videos top-space-lg hidden">
-              <div class="tile is-ancestor">
-                <div class="tile is-parent">
-                  <div class="tile is-child  bgwhite box">
-                    HEYO THIS IS VIDEOS CONTENT"
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-      <!-- ***********************************************************
-                          tab content // show add photo
+          <!-- ***********************************************************
+                          tab content // show photos
         ************************************************************** -->
 
-            <div class="add-photo top-space-lg hidden">
+
+            <div class="photos top-space-lg hidden" id="fakeUploadPhoto">
+              <% if (photos) { %>
+                <% photos.forEach(function(photo) { %>
+                  <% if (photo.spot_id === spot[0].id) { %>
+                    <div class="tile is-ancestor">
+                      <div class="tile is-parent">
+                        <div class="tile box is-child bgwhite">
+
+                          <figure class="image is-4by3">
+
+
+                                <img src="<%= photo.photo %>">
+
+                          </figure>
+
+                          <div class="tile is-child">
+                            <div class="columns">
+                              <div class="column is-8">
+
+                                <p class="top-space">
+                                <h3 class="title is-5">
+
+                            <%= photo.full_name %> added a photo
+                          </h3></p>
+                              <div class="subtitle is-6 grey">
+                                <%= photo.updated_at %>
+                              </div>
+
+                            </div>
+                            <div class="column">
+
+                            <div class="tile is-child is-right">
+
+                              <div class="tile is-ancestor">
+                                <div class="tile is-parent">
+                                  <div class="tile is-child  bgwhite">
+                                    <p class="top-space">
+
+                                    <form class="" action="#">
+                                      <div class="field">
+
+                                        <input type="hidden" name="like" value="1">
+                                        <button class="button is-primary is-outlined is-focus" type="submit" id="likes">&nbsp;&nbsp; Like&nbsp;</button>
+                                      </div>
+                                    </form>
+                                  </p>
+                                  </div>
+
+                                  <div class="tile is-child  bgwhite">
+                                    <p class="top-space">
+                                    <form class="" action="/users/location" method="post">
+                                      <div class="field">
+
+                                        <input type="hidden" name="follow" value="1">
+                                        <button class="button is-primary is-outlined is-focus" type="submit">Follow</button>
+                                      </div>
+                                    </form>
+                                  </p>
+                                  </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            </div>
+                          </div>
+
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                      <%  }  %>
+                      <%  })  %>
+                        <%  }  %>
+
+            </div>
+
+
+
+
+
+
+            <!-- ***********************************************************
+                                      tab content // show add video
+          ************************************************************** -->
+
+
+
+
+            <div class="add-video top-space-lg hidden" id="getVideoForm">
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">
                     <div class="field">
                       <div class="file">
                         <label class="file-label">
-                          <input class="file-input" id="spotphotoupload" type="file" name="resume">
+                          <input class="file-input" id="spotvideoupload" type="file" name="resume">
                           <span id="filename" class="file-cta">
                             <span class="file-icon">
                               <i class="fa fa-upload"></i>
                             </span>
                             <span class="file-label">
-                              Choose a Photo...
+                              Choose a Video...
                             </span>
                           </span>
                         </label>
                       </div>
-                      <div id="hidden-spot-id" class="hidden"><%= spot[0].id %></div>
-                      <div id="hidden-user-id" class="hidden"><%= user[0].id %></div>
-                      <button class="button" id="addphoto" onclick="addPhoto('media')">
-                        'Add Photo'
+                      <div id="hidden-spot-id" class="hidden">
+                        <%= spot[0].id %>
+                      </div>
+                      <div id="hidden-user-id" class="hidden">
+                        <%= user[0].id %>
+                      </div>
+                      <button class="button is-outlined is-primary is-focused" id="addvideo" onclick="addVideo('media')">
+                        Add Video
                       </button>
                     </div>
                   </div>
@@ -335,9 +422,93 @@
               </div>
             </div>
 
+            <!-- ***********************************************************
+                                      tab content // show videos
+            ************************************************************** -->
 
 
 
+
+
+            <div class="videos top-space-lg hidden" id="fakeUploadVideo">
+              <% if (videos) { %>
+                <% videos.forEach(function(video) { %>
+                  <% if (video.spot_id === spot[0].id) { %>
+                    <div class="tile is-ancestor">
+                      <div class="tile is-parent">
+                        <div class="tile box is-child bgwhite">
+
+
+
+                            <video width="100%" controls>
+                    <source src="<%= video.video %>" type="video/mp4">
+                    </video>
+
+
+
+                          <div class="tile is-child">
+                            <div class="columns">
+                              <div class="column is-8">
+                                <p class="top-space">
+                                <h3 class="title is-5">
+
+                            <%= video.full_name %> added a video
+                          </h3></p>
+                              <p class="subtitle is-6 grey">
+                                <%= video.updated_at %>
+                              </p>
+
+                            </div>
+                            <div class="column">
+
+                            <div class="tile is-child is-right">
+
+                              <div class="tile is-ancestor">
+                                <div class="tile is-parent">
+                                  <div class="tile is-child  bgwhite">
+
+                                    <p class="top-space">
+                                    <form class="" action="/users/profile" method="post">
+                                      <div class="field">
+                                          <input type="hidden" name="videoSpotName" value="1">
+                                        <input type="hidden" name="like" value="<%= spot[0].spot_name %>">
+                                        <button class="button is-primary is-outlined is-focus" type="submit">&nbsp;&nbsp; Like&nbsp;</button>
+                                      </div>
+                                    </form>
+                                  </p>
+                                  </div>
+
+                                  <div class="tile is-child  bgwhite">
+                                    <p class="top-space">
+                                    <form class="" action="/users/profile" method="post">
+                                      <div class="field">
+
+                                        <input type="hidden" name="follow" value="1">
+                                        <button class="button is-primary is-outlined is-focus" type="submit">Follow</button>
+                                      </div>
+
+                                    </form>
+                                    </p>
+                                  </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            </div>
+                          </div>
+
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                      <%  }  %>
+                      <%  })  %>
+                        <%  }  %>
+
+            </div>
 
 
 
@@ -380,119 +551,310 @@
                   <div class="tile is-ancestor">
                     <div class="tile is-parent is-vertical">
                       <div class="tile box is-child bgwhite">
-                        <h3 class="title is-5">
+                        <div class="columns">
+                          <div class="column is-10">
+                            <h3 class="title is-5">
 
                       <%= comment.full_name %> said...
                     </h3>
-                        <h3 class="subtitle is-6 grey">
+                            <h3 class="subtitle is-6 grey">
                       <%= comment.updated_at %>
                     </h3>
-                        <p>
-                          <%= comment.comment %>
+                            <p>
+                              <%= comment.comment %>
+                            </p>
+                          </div>
+                          <div class="column">
+                            <div class="tile is-ancestor">
+                              <div class="tile is-parent is-vertical">
+                                <div class="tile is-child  bgwhite">
+
+
+                                  <form class=" " action="/users/location " method="post ">
+                                    <div class="field ">
+                                      <input type="hidden" name="spot_id " value="<%= spot[0].id %>">
+                                  <input type="hidden" name="spot_name" value="<%= spot[0].spot_name %>">
+                                  <input type="hidden" name="like" value="1">
+                                  <button class="button is-primary is-outlined is-focus" type="submit">&nbsp;&nbsp; Like&nbsp;</button>
+                                </div>
+                                </form>
+
+                              </div>
+
+                              <div class="tile is-child  bgwhite">
+
+                                <form class="" action="/users/location" method="post">
+                                  <div class="field">
+                                    <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                                    <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                                    <input type="hidden" name="follow" value="1">
+                                    <button class="button is-primary is-outlined is-focus" type="submit">Follow</button>
+                                  </div>
+                                </form>
+
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <%  }  %>
-                    <%  })  %>
+            </div>
+            <%  }  %>
+              <%  })  %>
 
 
 
+                <% if (videos) { %>
+                  <% videos.forEach(function(video) { %>
+                    <% if (video.spot_id === spot[0].id) { %>
+                      <div class="tile is-ancestor">
+                        <div class="tile is-parent">
+                          <div class="tile box is-child bgwhite">
+                            <div class="columns">
 
+                              <div class="column is-6">
 
-
-
-
-                      <% if (checkins) { %>
-                        <% checkins.forEach(function(checkin) { %>
-                          <% if (checkin.spot_id === spot[0].id) { %>
-                            <div class="tile is-ancestor">
-                              <div class="tile is-parent is-vertical">
-                                <div class="tile box is-child bgwhite">
+                                <p>
                                   <h3 class="title is-5">
 
-                      <%= checkin.full_name %> Checked In %></h3>
-                                  <p>
-                                    <h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
+                              <%= video.full_name %> added a video
+                            </h3></p>
+                                <p class="subtitle is-6 grey">
+                                  <%= video.updated_at %>
+                                </p>
+                              </div>
+                              <div class="column is-4">
+                                <figure class="image is-1by2">
+
+                                  <video width="200" controls>
+                          <source src="<%= video.video %>" type="video/mp4">
+                          </video>
+
+                                </figure>
+
+                              </div>
+                              <div class="column">
 
 
+                                <div class="tile is-ancestor">
+                                  <div class="tile is-parent is-vertical">
+                                    <div class="tile is-child  bgwhite">
+
+
+                                      <form class="" action="/users/location" method="post">
+                                        <div class="field">
+                                          <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                                          <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                                          <input type="hidden" name="like" value="1">
+                                          <button class="button is-primary is-outlined is-focus" type="submit">&nbsp;&nbsp; Like&nbsp;</button>
+                                        </div>
+                                      </form>
+
+                                    </div>
+
+                                    <div class="tile is-child  bgwhite">
+
+                                      <form class="" action="/users/location" method="post">
+                                        <div class="field">
+                                          <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                                          <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                                          <input type="hidden" name="follow" value="1">
+                                          <button class="button is-primary is-outlined is-focus" type="submit">Follow</button>
+                                        </div>
+                                      </form>
+
+
+                                    </div>
+                                  </div>
                                 </div>
+
+
+
+
+
                               </div>
                             </div>
-                            <% } %>
-                              <%  })  %>
-                                <%  }  %>
+                          </div>
+                        </div>
+                      </div>
+                      <%  }  %>
+                        <%  })  %>
+                          <%  }  %>
+
+
+
+                            <% if (checkins) { %>
+                              <% checkins.forEach(function(checkin) { %>
+                                <% if (checkin.spot_id === spot[0].id) { %>
+                                  <div class="tile is-ancestor">
+                                    <div class="tile is-parent is-vertical">
+                                      <div class="tile box is-child bgwhite">
+                                        <h3 class="title is-5">
+
+                      <%= checkin.full_name %> Checked In %></h3>
+                                        <p>
+                                          <h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
+
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <% } %>
+                                    <%  })  %>
+                                      <%  }  %>
 
 
 
 
 
-            </div>
 
 
-            <!-- ***********************************************************
+                                        <% if (photos) { %>
+                                          <% photos.forEach(function(photo) { %>
+                                            <% if (photo.spot_id === spot[0].id) { %>
+                                              <div class="tile is-ancestor">
+                                                <div class="tile is-parent">
+                                                  <div class="tile box is-child bgwhite">
+                                                    <div class="columns">
+
+                                                      <div class="column is-6">
+
+                                                        <p>
+                                                          <h3 class="title is-5">
+
+                                                    <%= photo.full_name %> added a photo
+                                                  </h3></p>
+                                                        <p class="subtitle is-6 grey">
+                                                          <%= photo.updated_at %>
+                                                        </p>
+                                                      </div>
+                                                      <div class="column is-4">
+                                                        <figure class="image is-1by2">
+
+
+                                                              <img src="<%= photo.photo %>">
+                                                        </figure>
+
+                                                      </div>
+                                                      <div class="column">
+
+
+                                                        <div class="tile is-ancestor">
+                                                          <div class="tile is-parent is-vertical">
+                                                            <div class="tile is-child  bgwhite">
+
+
+                                                              <form class="" action="/users/location" method="post">
+                                                                <div class="field">
+                                                                  <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                                                                  <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                                                                  <input type="hidden" name="like" value="1">
+                                                                  <button class="button is-primary is-outlined is-focus" type="submit">&nbsp;&nbsp; Like&nbsp;</button>
+                                                                </div>
+                                                              </form>
+
+                                                            </div>
+
+                                                            <div class="tile is-child  bgwhite">
+
+                                                              <form class="" action="/users/location" method="post">
+                                                                <div class="field">
+                                                                  <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                                                                  <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                                                                  <input type="hidden" name="follow" value="1">
+                                                                  <button class="button is-primary is-outlined is-focus" type="submit">Follow</button>
+                                                                </div>
+                                                              </form>
+
+
+                                                            </div>
+                                                          </div>
+                                                        </div>
+
+
+
+
+
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <%  }  %>
+                                                <%  })  %>
+                                                  <%  }  %>
+
+
+          </div>
+
+
+          <!-- ***********************************************************
                 tab content // post a comment
 ************************************************************** -->
 
-            <div class="add-comment top-space-lg hidden">
+          <div class="add-comment top-space-lg hidden">
 
-              <div class="tile is-ancestor">
-                <div class="tile is-parent">
-                  <div class="tile is-child  bgwhite box">
-                    <form class="" action="/users/location" method="post">
+            <div class="tile is-ancestor">
+              <div class="tile is-parent">
+                <div class="tile is-child  bgwhite box">
+                  <form class="" action="/users/location" method="post">
 
-                      <div class="field">
-                        <label class="label"><%= user[0].full_name %>, what are your thoughts?</label>
-                        <div class="control">
-                          <textarea class="textarea" id="comment" name="comment" placeholder="Comments..."></textarea>
-                          <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
-                          <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
-                        </div>
-                      </div>
-
-
+                    <div class="field">
+                      <label class="label"><%= user[0].full_name %>, what are your thoughts?</label>
                       <div class="control">
-                        <button class="button is-primary is-outlined is-focus" type="submit">Add Comment</button>
+                        <textarea class="textarea" id="comment" name="comment" placeholder="Comments..."></textarea>
+                        <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                        <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
                       </div>
+                    </div>
 
-                    </form>
-                  </div>
+
+                    <div class="control">
+                      <button class="button is-primary is-outlined is-focus" type="submit">Add Comment</button>
+                    </div>
+
+                  </form>
                 </div>
               </div>
             </div>
-            <!-- ***********************************************************
+          </div>
+          <!-- ***********************************************************
                 tab content // show comments
 ************************************************************** -->
-            <div class="comments top-space-lg hidden">
+          <div class="comments top-space-lg hidden">
 
-              <% comments.forEach(function(comment) { %>
-                <% if (comment.spot_id === spot[0].id) { %>
-                  <div class="tile is-ancestor">
-                    <div class="tile is-parent is-vertical">
-                      <div class="tile box is-child bgwhite">
-                        <h3 class="title is-5">
+            <% comments.forEach(function(comment) { %>
+              <% if (comment.spot_id === spot[0].id) { %>
+                <div class="tile is-ancestor">
+                  <div class="tile is-parent is-vertical">
+                    <div class="tile box is-child bgwhite">
+                      <h3 class="title is-5">
 
                       <%= comment.full_name %> said...
                     </h3>
-                        <h3 class="subtitle is-6 grey">
+                      <h3 class="subtitle is-6 grey">
                       <%= comment.updated_at %>
                     </h3>
-                        <p>
-                          <%= comment.comment %>
-                      </div>
+                      <p>
+                        <%= comment.comment %>
+                      </p>
                     </div>
                   </div>
-                  <%  }  %>
-                    <%  })  %>
+                </div>
+                <%  }  %>
+                  <%  })  %>
 
 
 
 
-
-            </div>
 
           </div>
 
         </div>
+
+      </div>
 
 
 

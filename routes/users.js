@@ -122,8 +122,9 @@ router.post('/location', isLoggedIn, function(req, res) {
 
 
 
-
-    // if you received a upvote request
+    /* ..................................................................
+         if you received a upvote request
+    ..................................................................*/
 
     if (req.body.upvote) {
       console.log('helloooooooooooooooooooooooooo');
@@ -170,7 +171,8 @@ router.post('/location', isLoggedIn, function(req, res) {
                             checkins = "";
                           }
 
-                          knex('photos')
+                          knex('users')
+                            .join('photos', 'photos.user_id', 'users.id')
                             .then(function(results) {
                               let photos;
 
@@ -180,107 +182,145 @@ router.post('/location', isLoggedIn, function(req, res) {
                                 photos = "";
                               }
 
+                              knex('users')
+                                .join('videos', 'videos.user_id', 'users.id')
+                                .then(function(results) {
+                                  let videos;
 
-                          console.log(checkins, 'CHECKIN FOR CHECKIN REQUEST');
-                          res.render('location', {
-                            user: req.session.passport.user,
-                            feature: featureSpotString,
-                            spot: spot,
-                            comments: comments,
-                            checkins: checkins,
-                            photos: photos
-                          });
+                                  if (results) {
+                                    videos = results;
+                                  } else {
+                                    videos = "";
+                                  }
+
+
+                                  console.log(checkins, 'CHECKIN FOR CHECKIN REQUEST');
+                                  res.render('location', {
+                                    user: req.session.passport.user,
+                                    feature: featureSpotString,
+                                    spot: spot,
+                                    comments: comments,
+                                    checkins: checkins,
+                                    photos: photos,
+                                    videos: videos
+                                  });
+                                });
+                            });
                         });
                     });
                 });
             });
-        });
-      });
-  //  })
-}
+        })
+    }
 
-// if you received a post request with a comment
 
-if (req.body.comment) {
+    /* ..................................................................
+         if you received a post request with a comment
+    ..................................................................*/
 
-  let checkins2;
-  return knex('comments')
-    .insert({
-      user_id: req.session.passport.user[0].id,
-      spot_id: req.body.spot_id,
-      comment: req.body.comment
-    })
-    .then(function() {
-      knex('users')
-        .join('comments', 'comments.user_id', 'users.id')
-        .then(function(results) {
-          comments = results;
 
-          locationsFeatureCollection.features.forEach(function(feature) {
-            if (feature.properties.name === req.body.spot_name) {
-              featureSpot.features.push(feature);
-            }
-          });
+    if (req.body.comment) {
 
-          let featureSpotString = JSON.stringify(featureSpot);
-
-          knex('spots').where('spot_name', req.body.spot_name)
+      let checkins2;
+      return knex('comments')
+        .insert({
+          user_id: req.session.passport.user[0].id,
+          spot_id: req.body.spot_id,
+          comment: req.body.comment
+        })
+        .then(function() {
+          knex('users')
+            .join('comments', 'comments.user_id', 'users.id')
             .then(function(results) {
-              var spot = results;
-                var photos;
-              knex('photos')
+              comments = results;
+
+              locationsFeatureCollection.features.forEach(function(feature) {
+                if (feature.properties.name === req.body.spot_name) {
+                  featureSpot.features.push(feature);
+                }
+              });
+
+              let featureSpotString = JSON.stringify(featureSpot);
+
+              knex('spots').where('spot_name', req.body.spot_name)
                 .then(function(results) {
+                  var spot = results;
+                  var photos;
+
+                  knex('users')
+                    .join('photos', 'photos.user_id', 'users.id')
+                    .then(function(results) {
 
 
-                  if (results) {
-                    photos = results;
-                  } else {
-                    photos = "";
-                  }
-                });
-
-              knex('checkins')
-                .then(function(results) {
-                  var checkins2;
-
-                  if (results) {
-                    knex('users')
-                      .join('checkins', 'users.id', 'checkins.user_id')
-                      .then(function(results) {
-                        checkins2 = results;
-
-                        res.render('location', {
-                          user: req.session.passport.user,
-                          feature: featureSpotString,
-                          spot: spot,
-                          comments: comments,
-                          checkins: checkins2,
-                          photos: photos
-                        });
-                      })
-
-                  } else {
-                    checkins2 = "";
-
-                    res.render('location', {
-                      user: req.session.passport.user,
-                      feature: featureSpotString,
-                      spot: spot,
-                      comments: comments,
-                      checkins: checkins2,
-                      photos: photos
+                      if (results) {
+                        photos = results;
+                      } else {
+                        photos = "";
+                      }
                     });
-                  }
+
+                  knex('users')
+                  .join('videos', 'videos.user_id', 'users.id')
+                    .then(function(results) {
+                      let videos;
+
+                      if (results) {
+                        videos = results;
+                      } else {
+                        videos = "";
+                      }
+
+
+                      knex('checkins')
+                        .then(function(results) {
+                          var checkins2;
+
+                          if (results) {
+                            knex('users')
+                              .join('checkins', 'users.id', 'checkins.user_id')
+                              .then(function(results) {
+                                checkins2 = results;
+
+                                res.render('location', {
+                                  user: req.session.passport.user,
+                                  feature: featureSpotString,
+                                  spot: spot,
+                                  comments: comments,
+                                  checkins: checkins2,
+                                  photos: photos,
+                                  videos: videos
+                                });
+                              })
+
+                          } else {
+                            checkins2 = "";
+
+                            res.render('location', {
+                              user: req.session.passport.user,
+                              feature: featureSpotString,
+                              spot: spot,
+                              comments: comments,
+                              checkins: checkins2,
+                              photos: photos,
+                              videos: videos
+                            });
+                          }
+                        });
+                    });
                 });
             });
         });
-    });
+    }
 
-}
 
-// if you didn't receive a request with a comment or a checkin request or upvote request or photo request
 
-if (!req.body.comment && !req.body.checkin && !req.body.upvote && !req.body.spot_id) {
+
+/* ..................................................................
+  if you didn't receive a request with a comment or a checkin request or upvote request or photo request or video request..ugh
+..................................................................*/
+
+
+if (!req.body.comment && !req.body.checkin && !req.body.upvote && !req.body.photo && !req.body.video) {
 
   locationsFeatureCollection.features.forEach(function(feature) {
     if (feature.properties.name === req.body.spot_name) {
@@ -315,7 +355,8 @@ if (!req.body.comment && !req.body.checkin && !req.body.upvote && !req.body.spot
             .then(function(results) {
               let comments = results;
 
-              knex('photos')
+              knex('users')
+                .join('photos', 'photos.user_id', 'users.id')
                 .then(function(results) {
                   let photos;
 
@@ -325,22 +366,39 @@ if (!req.body.comment && !req.body.checkin && !req.body.upvote && !req.body.spot
                     photos = "";
                   };
 
+                  knex('users')
+                  .join('videos', 'videos.user_id', 'users.id')
+                    .then(function(results) {
+                      let videos;
 
-                  res.render('location', {
-                    user: req.session.passport.user,
-                    feature: featureSpotString,
-                    spot: spot,
-                    comments: comments,
-                    checkins: checkins,
-                    photos: photos
-                  });
+                      if (results) {
+                        videos = results;
+                      } else {
+                        videos = "";
+                      }
+
+
+                      res.render('location', {
+                        user: req.session.passport.user,
+                        feature: featureSpotString,
+                        spot: spot,
+                        comments: comments,
+                        checkins: checkins,
+                        photos: photos,
+                        videos: videos
+                      });
+                    })
                 })
             })
         });
     })
 }
 
-// if you received a checkin request
+
+/* ..................................................................
+              if you received a checkin request
+..................................................................*/
+
 
 if (req.body.checkin) {
 
@@ -373,7 +431,8 @@ if (req.body.checkin) {
                 .then(function(results) {
                   let checkins = results;
 
-                  knex('photos')
+                  knex('users')
+                    .join('photos', 'photos.user_id', 'users.id')
                     .then(function(results) {
                       let photos;
 
@@ -383,26 +442,43 @@ if (req.body.checkin) {
                         photos = "";
                       };
 
+                      knex('users')
+                      .join('videos', 'videos.user_id', 'users.id')
+                        .then(function(results) {
+                          let videos;
 
-                  res.render('location', {
-                    user: req.session.passport.user,
-                    feature: featureSpotString,
-                    spot: spot,
-                    comments: comments,
-                    checkins: checkins,
-                    photos: photos
-                  });
+                          if (results) {
+                            videos = results;
+                          } else {
+                            videos = "";
+                          }
+
+
+                          res.render('location', {
+                            user: req.session.passport.user,
+                            feature: featureSpotString,
+                            spot: spot,
+                            comments: comments,
+                            checkins: checkins,
+                            photos: photos,
+                            videos: videos
+                          });
+                        });
+                    });
                 });
             });
         });
-    });
-        })
+    })
 }
 
-// if you received an add photo request
 
-if (req.body.spot_id) {
-console.log('HELLO I AM HERE PLEASE RENDER ')
+/* ..................................................................
+          if you received an add photo request
+..................................................................*/
+
+
+if (req.body.photo) {
+  console.log('HELLO I AM HERE PLEASE RENDER ')
   knex('photos')
     .insert({
       user_id: req.session.passport.user[0].id,
@@ -411,9 +487,94 @@ console.log('HELLO I AM HERE PLEASE RENDER ')
       upvotes: 0
     })
     .then(function() {
-      knex('photos')
+      knex('users').where('id', req.session.passport.user[0].id)
+        .join('photos', 'photos.user_id', 'users.id')
         .then(function(results) {
           let photos = results;
+
+          locationsFeatureCollection.features.forEach(function(feature) {
+            if (feature.properties.name === req.body.spot_name) {
+              featureSpot.features.push(feature);
+            }
+          });
+
+          let featureSpotString = JSON.stringify(featureSpot);
+
+          knex('spots').where('id', req.body.spot_id)
+            .then(function(results) {
+              let spot = results;
+
+
+              knex('checkins')
+                .then(function(results) {
+
+                  if (results) {
+                    knex('users')
+                      .join('checkins', 'users.id', 'checkins.user_id')
+                      .then(function(results) {
+                        checkins = results;
+                      })
+                  } else {
+                    checkins = "";
+                  }
+
+                  knex('users')
+                    .join('comments', 'comments.user_id', 'users.id')
+                    .then(function(results) {
+                      console.log('IM RENDERINGGGGGGGGGGGGGGGGGG')
+                      let comments = results;
+
+                      knex('users')
+                      .join('videos', 'videos.user_id', 'users.id')
+                        .then(function(results) {
+                          let videos;
+
+                          if (results) {
+                            videos = results;
+                          } else {
+                            videos = "";
+                          }
+
+
+                          res.render('location', {
+                            user: req.session.passport.user,
+                            feature: featureSpotString,
+                            spot: spot,
+                            comments: results,
+                            checkins: checkins,
+                            photos: photos,
+                            videos: videos
+                          });
+                        })
+                    });
+                });
+            });
+        });
+    });
+}
+
+
+
+/* ..................................................................
+          if you received an add video request
+..................................................................*/
+
+
+if (req.body.video) {
+  console.log('IM A VIDEOOOOOOOOOOO ')
+
+  knex('videos')
+    .insert({
+      user_id: req.session.passport.user[0].id,
+      spot_id: parseInt(req.body.spot_id),
+      video: req.body.video,
+      upvotes: 0
+    })
+    .then(function() {
+      knex('users')
+      .join('videos', 'videos.user_id', 'users.id')
+        .then(function(results) {
+          let videos = results;
 
           locationsFeatureCollection.features.forEach(function(feature) {
             if (feature.properties.name === req.body.spot_name) {
@@ -437,7 +598,7 @@ console.log('HELLO I AM HERE PLEASE RENDER ')
                       .join('checkins', 'users.id', 'checkins.user_id')
                       .then(function(results) {
                         checkins = results;
-                      })
+                      });
 
                   } else {
                     checkins = "";
@@ -446,20 +607,38 @@ console.log('HELLO I AM HERE PLEASE RENDER ')
                   knex('users')
                     .join('comments', 'comments.user_id', 'users.id')
                     .then(function(results) {
-                      console.log('IM RENDERINGGGGGGGGGGGGGGGGGG')
-                      res.render('location', {
-                        user: req.session.passport.user,
-                        feature: featureSpotString,
-                        spot: spot,
-                        comments: results,
-                        checkins: checkins,
-                        photos: photos
-                      });
-                    })
-                })
+                      console.log('IM RENDERINGGGGGGGGGGGGGGGGGG VIDEOOO');
+                      let comments = results;
+
+                      knex('users')
+                      .join('photos', 'photos.user_id', 'users.id')
+                        .then(function(results) {
+                          let photos;
+
+                          if (results) {
+                            photos = results;
+                          } else {
+                            photos = "";
+                          }
+
+
+
+
+                          res.render('location', {
+                            user: req.session.passport.user,
+                            feature: featureSpotString,
+                            spot: spot,
+                            comments: comments,
+                            checkins: checkins,
+                            videos: videos,
+                            photos: photos
+                          });
+                        });
+                    });
+                });
             });
-        })
-    })
+        });
+    });
 }
 })
 
@@ -469,22 +648,78 @@ console.log('HELLO I AM HERE PLEASE RENDER ')
 ====================================================================  */
 
 // router.get('/location', isLoggedIn, function(req, res) {
-//   console.log(req.body, 'REQ BODY FROM GET LOCATION')
-//   return knex('comments')
-//   .insert({
-//     user_id : req.session.passport.user.id,
-//     spot_id : req.body.spot_id,
-//     comment: req.body.comment
-//   })
-//   .then(function () {
-//     knex('comments').where('spot_id', req.body.spot_id)
-//     .then(function (results) {
-//       let comments = results;
-//       res.render('location', {user:req.session.passport.user, comments:comments})
-//     })
-//   })
+//   console.log(req.query,'HEY YOU DONE BE GOTTEN')
+//     let spot_id = req.query.spot_id
+//     let user_id = req.query.user_id
+//     let photo =  req.query.photo
+//   let featureSpot = {
+//     "type": "FeatureCollection",
+//     "features": []
+//   };
 //
-// })
+//   locationsFeatureCollection.features.forEach(function(feature) {
+//     if (feature.properties.name === req.body.spot_name) {
+//       featureSpot.features.push(feature);
+//     }
+//   });
+//
+//   let featureSpotString = JSON.stringify(featureSpot);
+//
+//   knex('spots').where('id', spot_id)
+//     .then(function(results) {
+//       let spot = results;
+//
+//
+//       knex('checkins')
+//         .then(function(results) {
+//
+//
+//           if (results) {
+//             knex('users')
+//               .join('checkins', 'users.id', 'checkins.user_id')
+//               .then(function(results) {
+//                 checkins = results;
+//               })
+//
+//           } else {
+//             checkins = "";
+//           }
+//
+//           knex('users')
+//             .join('comments', 'comments.user_id', 'users.id')
+//             .then(function(results) {
+//               let comments = results;
+//
+//               knex('photos')
+//                 .then(function(results) {
+//                   let photos;
+//
+//                   if (results) {
+//                     photos = results;
+//                   } else {
+//                     photos = "";
+//                   };
+//
+//
+//                   res.render('location', {
+//                     user: req.session.passport.user,
+//                     feature: featureSpotString,
+//                     spot: spot,
+//                     comments: comments,
+//                     checkins: checkins,
+//                     photos: photos
+//                   });
+//                 })
+//             });
+//         });
+//     });
+//   });
+
+
+
+
+
+
 
 
 /*  ====================================================================
@@ -591,6 +826,87 @@ router.post('/login', passport.authenticate('login', {
 router.get('/profile', isLoggedIn, function(req, res) {
 
 
+  /* ..................................................................
+       if you received a video like request
+  ..................................................................*/
+
+  // if (req.body.videoSpotName) {
+
+
+//     knex('videos').where('spot_id', req.body.spot_id)
+//       .then(function(results) {
+//         let likeVideoVal = results[0].videoSpotName;
+//
+//         return knex('videos').where('spot_id', req.body.spot_id)
+//           .update({
+//             upvotes: likeVideoVal + 1
+//           })
+//           .then(function() {
+//             knex('users').where('users.id', req.session.passport.user[0].id)
+//               .join('comments', 'comments.user_id', 'users.id')
+//               .join('spots', 'spots.id', 'comments.spot_id')
+//               .then(function(results) {
+//                 let comments;
+//                 if (results) {
+//                   comments = results;
+//                 } else {
+//                   comments = ""
+//                 }
+//
+//                 console.log(comments, 'COMMENTS FOR THE USER PROFILE PAGE')
+//
+//                 knex('checkins').where('checkins.user_id', req.session.passport.user[0].id)
+//                   .join('spots', 'spots.id', 'checkins.spot_id')
+//                   .then(function(results) {
+//                     let checkins;
+//                     if (results) {
+//                       checkins = results;
+//                     } else {
+//                       checkins = ""
+//                     }
+//                       var photos;
+//
+//                     knex ('photos').where('photos.user_id', req.session.passport.user[0].id)
+//                     .join('spots', 'spots.id', 'photos.spot_id')
+//                     .then(function(results){
+//                       if (results) {
+//                         photos = results;
+//                       } else {
+//                         photos = ""
+//                       }
+//
+//                       knex('videos').where('videos.user_id', req.session.passport.user[0].id)
+//                       .join('spots', 'spots.id', 'videos.spot_id')
+//                       .then(function(results) {
+//                         if (results) {
+//                           videos = results;
+//                         } else {
+//                           videos = ""
+//                         }
+//
+//
+//                     console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE')
+//                     res.render('profile', {
+//                       user: req.session.passport.user,
+//                       comments: comments,
+//                       checkins: checkins,
+//                       photos: photos,
+//                       videos: videos
+//                     });
+//                   })
+//                 })
+//               })
+//               })
+//
+//
+//
+//
+//           })
+//
+// })
+//
+// }
+
   knex('users').where('users.id', req.session.passport.user[0].id)
     .join('comments', 'comments.user_id', 'users.id')
     .join('spots', 'spots.id', 'comments.spot_id')
@@ -613,14 +929,38 @@ router.get('/profile', isLoggedIn, function(req, res) {
           } else {
             checkins = ""
           }
+            var photos;
+
+          knex ('photos').where('photos.user_id', req.session.passport.user[0].id)
+          .join('spots', 'spots.id', 'photos.spot_id')
+          .then(function(results){
+            if (results) {
+              photos = results;
+            } else {
+              photos = ""
+            }
+
+            knex('videos').where('videos.user_id', req.session.passport.user[0].id)
+            .join('spots', 'spots.id', 'videos.spot_id')
+            .then(function(results) {
+              if (results) {
+                videos = results;
+              } else {
+                videos = ""
+              }
+
+
           console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE')
           res.render('profile', {
             user: req.session.passport.user,
             comments: comments,
-            checkins: checkins
+            checkins: checkins,
+            photos: photos,
+            videos: videos
           });
         })
-
+      })
+    })
     })
 
 });
@@ -633,11 +973,11 @@ router.post('/profile', function(req, res) {
   console.log(req.body.url, 'HELLLOOOOOOOOOOOOOOOOOOOOOOOOOO');
   let url = req.body.url
 
-  req.session.passport.user.profile_photo = url
-  req.save();
+  req.session.passport.user[0].profile_photo = url
 
 
-  console.log(req.session.passport.user, 'SHOULD BE UPDATED USERRRRRRR')
+
+  console.log(req.session.passport.user, 'SHOULD BE UPDATED USERRRRRRR');
   return knex('users').where('id', req.session.passport.user[0].id)
     .update('profile_photo', url)
     .then(function() {
@@ -649,10 +989,10 @@ router.post('/profile', function(req, res) {
           if (results) {
             comments = results;
           } else {
-            comments = ""
+            comments = "";
           }
 
-          //  console.log(comments, 'COMMENTS FOR THE USER PROFILE PAGE')
+          console.log(comments, 'COMMENTS FOR THE USER PROFILE PAGE');
 
           knex('checkins').where('checkins.user_id', req.session.passport.user[0].id)
             .join('spots', 'spots.id', 'checkins.spot_id')
@@ -661,29 +1001,51 @@ router.post('/profile', function(req, res) {
               if (results) {
                 checkins = results;
               } else {
-                checkins = ""
+                checkins = "";
               }
-              //console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE')
+                var photos;
+
+              knex ('photos').where('photos.user_id', req.session.passport.user[0].id)
+              .join('spots', 'spots.id', 'photos.spot_id')
+              .then(function(results){
+                if (results) {
+                  photos = results;
+                } else {
+                  photos = "";
+                }
+
+                knex('videos').where('videos.user_id', req.session.passport.user[0].id)
+                .join('spots', 'spots.id', 'videos.spot_id')
+                .then(function(results) {
+                  if (results) {
+                    videos = results;
+                  } else {
+                    videos = "";
+                  }
+
+
+              console.log(results, 'CHECKINS FOR THE USER PROFILE PAGE');
               res.render('profile', {
                 user: req.session.passport.user,
                 comments: comments,
-                checkins: checkins
-
+                checkins: checkins,
+                photos: photos,
+                videos: videos
               });
-            })
-
-        })
-
-
-
-
-    })
+            });
+          });
+        });
+      });
 
 
 
+    });
 
 
-})
+
+
+
+});
 
 
 

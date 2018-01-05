@@ -23,9 +23,18 @@ $(document).ready(function() {
 
   $('#nav-tabs').on('click', function() {
     var target = $(event.target)[0].id;
-console.log(target, 'WHAT THE HELL IS GETTIN CLICKED')
+    console.log(target, 'TARGET WTF')
     $('div.get-content > div').not('.hidden').toggleClass('hidden');
     $('.' + target).toggleClass('hidden');
   });
+
+  $('#likes').on('click', function() {
+    var target = $(event.target)[0].id;
+
+    let value = $('#profile-likes').val();
+    console.log(value, 'THIS IS THE VALUE')
+
+  });
+
 
 });

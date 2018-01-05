@@ -56,7 +56,7 @@ app.use('/map', mapRouter);
 app.use('/users', users);
 
 app.use('/', function (req, res) {
-  res.render('./index');
+  res.render('./login');
 });
 
 
