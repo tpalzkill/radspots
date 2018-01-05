@@ -3,41 +3,13 @@
 <% include partials/header %>
 
 <body>
+<%include partials/nav %>
 
-<h1>HOOOOOORAYYYYYY YOU BE LOGGED INNNNN</h1>
-<h2>profile page</h2>
-<p>user:
-  <%= user[0].full_name %>
-</p>
-<p>email:
-  <%= user[0].email %>
-</p>
-<a href="success">Click me!</a>
 
 <!-- MAAAAPPPPP -->
 
-<!-- map styles to be moved to css -->
-<div id="map" style="width: 500px; height: 500px">
-  <style>
-    .marker {
-      background-image: url('../images/skater.png');
-      background-size: cover;
-      width: 25px;
-      height: 25px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
 
-    .mapboxgl-popup {
-      max-width: 200px;
-    }
-
-    .mapboxgl-popup-content {
-      text-align: center;
-      font-family: 'Open Sans', sans-serif;
-    }
-  </style>
-
+<div id="map" class="map-main">
 
 </div>
 
@@ -114,13 +86,12 @@
       .setPopup(new mapboxgl.Popup({
           offset: 25
         }) // add popup text
-        .setHTML('<form action="location" method="post">' + '<h3>' + marker.properties.name + '</h3>' + '<input type="hidden" name="spot_name" value="' + name + '"/>' + '<p>' + marker.properties.address + '</p>' +
-          '<input type="submit" value="More Info" />' + '</form>'))
+        .setHTML('<form action="location" method="post">' + '<h3 class="title is-6">' + marker.properties.name + '</h3>' + '<input type="hidden" name="spot_name" value="' + name + '"/>' + '<p class="subtitle is-6 grey">' + marker.properties.address + '</p>' +
+          '<button class="button is-primary is-outlined is-focus" type="submit">' + 'More Info' + '</button' + '</form>'))
 
       .addTo(map);
   });
 </script>
-
 
 
 

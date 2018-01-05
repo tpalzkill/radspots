@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+
+<% include partials/header %>
+
+  <body>
+    <% include partials/nav %>
+
+      <!-- <div class="container is-fluid"> -->
+      <div class="columns">
+
+        <div class="column is-8">
+
+          <div class="tile is-ancestor fixed is-8">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+
+                <div class="level">
+        <!-- Left side -->
+        <div class="level-left">
+          <div class="level-item">
+            <p class="subtitle is-5">
+              <strong>123</strong> posts
+            </p>
+          </div>
+          <div class="level-item">
+            <div class="field has-addons">
+              <p class="control">
+                <input class="input" type="text" placeholder="Find a post">
+              </p>
+              <p class="control">
+                <button class="button">
+                  Search
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ***********************************************************
+          users displayed below
+************************************************************** -->
+
+            <div class="feed top-space-lg">
+              <% if (users) { %>
+                <% users.forEach(function(user) { %>
+
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical">
+                      <div class="tile is-child bgwhite">
+
+                        <figure class="image is-96x96">
+                          <% if (user.profile_photo) { %>
+                            <img src="<%= user[0].image %>">
+                            <% } else { %>
+                              <img src="../images/user.png">
+                              <% } %>
+                        </figure>
+
+                      </div>
+
+
+
+
+                    <!-- <div class="tile is-parent is-vertical has-text-centered"> -->
+                      <div class="tile is-child bgwhite box">
+                        <h3 class="title is-5">
+                          <%= user.full_name %>
+                    </h3>
+
+                    <div class="level">
+                      <div class="level-item has-text-centered">
+                        <div>
+                          <p class="heading">Followers</p>
+                          <p class="title">
+                            followers
+                          </p>
+                        </div>
+                      </div>
+                      <div class="level-item has-text-centered">
+                        <div>
+                          <p class="heading">Following</p>
+                          <p class="title"> following </p>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                      </div>
+                    <!-- </div> -->
+                  </div>
+
+                  <%  })  %>
+                    <%  }  %>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+          </div>
+
+        </div>
+
+
+
+
+      <!-- </div> -->
+
+
+
+      <% include partials/footer %>
+  </body>
+
+</html>

@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
-</head>
+<% include partials/header %>
+<body>
+<% include partials/loggedout-nav %>
 
 
-<h1>HOOOOOORAYYYYYY YOU'RE STILL LOGGED IN</h1>
-<h2>another page</h2>
-<p>user: <%= user[0].full_name %></p>
-<p>email: <%= user[0].email %>
-<a href="logout"><button type="button">Logout</button></a>
+
+  <section class="hero login-width box">
+<div class="hero-body bgwhite">
+
+
+    <form class="" action="/users/login" method="post">
+      <h1 class="title is-5 has-text-centered">Changes Saved.</h1>
+      <h2 class="subtitle is-6 grey has-text-centered">Please log in.</h2>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+        <input class="input" type="email" id="email" name="email" multiple/>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+        <input class="input" type="password" id="password" name="password"/>
+        </div>
+      </div>
+
+<div class="control">
+  <button class="button is-primary is-outlined is-focus" type="submit">Login</button>
+</div>
+
+    </form>
+  </div>
+
+
+</section>
+
+<% include partials/footer %>
+</body>
 </html>

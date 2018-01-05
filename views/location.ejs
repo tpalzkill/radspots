@@ -1,124 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
 
-<head>
-  <title>Login</title>
-  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></script>
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css" rel="stylesheet" />
+<% include partials/header %>
 
+  <body>
+    <% include partials/nav %>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
-</head>
+      <!-- <div class="container is-fluid"> -->
+      <div class="columns">
+        <div class="column is-3 top-space">
 
-
-<h1>THIS IS THE LOCATION PAGE</h1>
-<img src="<%= spot[0].image %>">
-<h2><%= spot[0].spot_name %></h2>
-<h3>Type: <%= spot[0].type %></h3>
-<h4><%= spot[0].spot_location %></h4>
-<h6>Upvotes: <%= spot[0].upvotes %></h6>
-<h6>Sketch Level: <%= spot[0].sketch_level %></h6>
-
-<p>user: <%= user[0].full_name %></p>
-<p>email: <%= user[0].email %></p>
-  <a href="success">Click me!</a>
+          <!-- ***********************************************************
+                  left column first tile
+************************************************************** -->
 
 
-<!-- MAAAAPPPPP -->
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
 
-<!-- map styles to be moved to css -->
-<div id="map" style="width: 250px; height: 250px">
-  <style>
-    .marker {
-      background-image: url('../images/skater.png');
-      background-size: cover;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      /* cursor: pointer; */
-    }
+                <figure class="image is-1by2">
+                  <% if (spot[0].image) { %>
+                    <img src="<%= spot[0].image %>">
+                    <% } else { %>
+                      <img src="../images/skatepark-default.png">
+                      <% } %>
+                </figure>
 
-    .mapboxgl-popup {
-      max-width: 200px;
-    }
-
-    .mapboxgl-popup-content {
-      text-align: center;
-      font-family: 'Open Sans', sans-serif;
-    }
-  </style>
+                <h1 class="title is-3"><%= spot[0].spot_name %></h1>
 
 
+                <div class="level">
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Upvotes</p>
+                      <p class="title">
+                        <%= spot[0].upvotes %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Checkins</p>
+                      <% var count = 0 %>
+                        <% if (checkins) { %>
 
-
-<script>
-  var points = <%- feature %>
-</script>
-</div>
-
-
-<script>
-// create new map ...options to set center point to where the map starts out
-
-mapboxgl.accessToken = "pk.eyJ1IjoibWF3YXJyZW4iLCJhIjoiY2piZmdlODFuMnlzejJycGU2amoxdG44NyJ9.GlbjGsu0VqzCls45AniQgw";
-
-var map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v9',
-  center: points.features[0].geometry.coordinates,
-  zoom: 13
-});
-
-// track user location
-
-map.addControl(new mapboxgl.GeolocateControl({
-  positionOptions: {
-    enableHighAccuracy: true
-  },
-  trackUserLocation: true
-}));
+                          <% checkins.forEach(function(checkin) { %>
+                            <% if (checkin.spot_id === spot[0].id) { %>
+                              <% count++ %>
+                                <% } %>
+                                  <%  })  %>
+                                    <p class="title">
+                                      <%= count %>
+                                    </p>
+                                    <%  } else { %>
+                                      <p class="title">
+                                        <%= count %>
+                                      </p>
+                                      <% } %>
+                    </div>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <div>
+                      <p class="heading">Sketchness</p>
+                      <p class="title">
+                        <%= spot[0].sketch_level %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
 
-/* add a layer to the map that consists of the point location information in geoJSON format */
-map.on('load', function(e) {
 
-  map.addLayer({
-    "id": "locations",
-    "type": "symbol",
-    // geoJSON object containing location coordinates
-    "source": {
-      "type": "geojson",
-      "data": points  // data passed in from map route (feature)
-    },
-    "layout": {
-      // can set icon image here
-      "icon-image": "icon",
-      "icon-allow-overlap": true,
-    }
-  })
+          <!-- ***********************************************************
+                  left column second tile
+************************************************************** -->
 
-});
-//});
 
-var nav = new mapboxgl.NavigationControl();
-map.addControl(nav, 'top-left');
-// add markers to map
-points.features.forEach(function(marker) {
 
-  // create a HTML element for each feature
-  var el = document.createElement('div');
-  el.className = 'marker';
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+                <div class="level">
+                  <div class="level-item">
+                    <form class="" action="/users/location" method="post">
+                      <div class="field">
+                        <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                        <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                        <input type="hidden" name="checkin" value="true">
+                        <button class="button is-primary is-outlined is-focus" type="submit">Checkin</button>
+                      </div>
+                    </form>
+                  </div>
 
-  // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-    .setLngLat(marker.geometry.coordinates)
-    .addTo(map);
-});
-</script>
+
+                  <div class="level-item">
+
+                    <form class="" action="/users/location" method="post">
+                      <div class="field">
+                        <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                        <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                        <input type="hidden" name="upvote" value="1">
+                        <button class="button is-primary is-outlined is-focus" type="submit">Upvote</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
@@ -126,5 +121,387 @@ points.features.forEach(function(marker) {
 
 
 
+
+
+
+          <!-- ***********************************************************
+                  left column map tile
+************************************************************** -->
+          <div class="tile is-ancestor">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+                <!-- map styles to be moved to css -->
+                <div id="map" class="map-single"> </div>
+                <p class="subtitle is-6">
+                  <%= spot[0].spot_location %>
+                </p>
+
+                <!-- reassign feature variable passed in to points variable so it can be accessed in script tags below -->
+                <script>
+                  var points = <%- feature %>
+                </script>
+
+
+
+                <script>
+                  // create new map ...options to set center point to where the map starts out
+
+                  mapboxgl.accessToken = "pk.eyJ1IjoibWF3YXJyZW4iLCJhIjoiY2piZmdlODFuMnlzejJycGU2amoxdG44NyJ9.GlbjGsu0VqzCls45AniQgw";
+
+                  var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v9',
+                    center: points.features[0].geometry.coordinates,
+                    zoom: 13
+                  });
+
+                  // track user location
+
+                  map.addControl(new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                      enableHighAccuracy: true
+                    },
+                    trackUserLocation: true
+                  }));
+
+
+
+
+                  /* add a layer to the map that consists of the point location information in geoJSON format */
+                  map.on('load', function(e) {
+
+                    map.addLayer({
+                      "id": "locations",
+                      "type": "symbol",
+                      // geoJSON object containing location coordinates
+                      "source": {
+                        "type": "geojson",
+                        "data": points // data passed in from map route (feature)
+                      },
+                      "layout": {
+                        // can set icon image here
+                        "icon-image": "icon",
+                        "icon-allow-overlap": true,
+                      }
+                    })
+
+                  });
+                  //});
+
+                  var nav = new mapboxgl.NavigationControl();
+                  //map.addControl(nav, 'top-left');
+                  // add markers to map
+                  points.features.forEach(function(marker) {
+
+                    // create a HTML element for each feature
+                    var el = document.createElement('div');
+                    el.className = 'marker';
+
+                    // make a marker for each feature and add to the map
+                    new mapboxgl.Marker(el)
+                      .setLngLat(marker.geometry.coordinates)
+                      .addTo(map);
+                  });
+                </script>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ***********************************************************
+          right column
+************************************************************** -->
+
+        <div class="column is-8">
+
+          <div class="tile is-ancestor fixed is-8">
+            <div class="tile is-parent">
+              <div class="tile is-child  bgwhite box">
+                <div class="tabs is-left" id="nav-tabs">
+                  <ul>
+                    <a>
+                      <li id="photos">Photos</li>
+                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-photo"></i></li>
+                    </a>
+
+
+
+                    <a>
+                      <li id="videos">Videos</li>
+                            <li><i class="fa fa-plus" aria-hidden="true"  id="add-video"></i></li>
+                    </a>
+                    <a>
+                      <li id="checkins">Checkins</li>
+                    </a>
+                    <a>
+                      <li id="feed">Feed</li>
+                    </a>
+                    <a>
+                      <li id="comments">Comments</li>
+                          <li><i class="fa fa-plus" aria-hidden="true"  id="add-comment"></i></li>
+                    </a>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ***********************************************************
+          tab content to be displayed/hidden on click
+************************************************************** -->
+
+
+
+
+
+
+          <div class="get-content">
+
+            <div class="photos top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+
+                    <% if (photos) { %>
+                      <% photos.forEach(function(photo) { %>
+                        <% if (photo.spot_id === spot[0].id) { %>
+                          <div class="tile is-ancestor">
+                            <div class="tile is-parent is-vertical">
+                              <div class="tile box is-child bgwhite">
+                                <figure class="image is-1by2">
+
+                                    <img src="<%= photo.photo %>">
+
+
+                                </figure>
+
+                              </div>
+                            </div>
+                          </div>
+                          <%  }  %>
+                            <%  })  %>
+                              <%  }  %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="videos top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    HEYO THIS IS VIDEOS CONTENT"
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+      <!-- ***********************************************************
+                          tab content // show add photo
+        ************************************************************** -->
+
+            <div class="add-photo top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    <div class="field">
+                      <div class="file">
+                        <label class="file-label">
+                          <input class="file-input" id="spotphotoupload" type="file" name="resume">
+                          <span id="filename" class="file-cta">
+                            <span class="file-icon">
+                              <i class="fa fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                              Choose a Photo...
+                            </span>
+                          </span>
+                        </label>
+                      </div>
+                      <div id="hidden-spot-id" class="hidden"><%= spot[0].id %></div>
+                      <div id="hidden-user-id" class="hidden"><%= user[0].id %></div>
+                      <button class="button" id="addphoto" onclick="addPhoto('media')">
+                        'Add Photo'
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- ***********************************************************
+              tab content // show checkins
+************************************************************** -->
+
+            <div class="checkins top-space-lg hidden">
+              <% if (checkins) { %>
+                <% checkins.forEach(function(checkin) { %>
+                  <% if (checkin.spot_id === spot[0].id) { %>
+                    <div class="tile is-ancestor">
+                      <div class="tile is-parent is-vertical">
+                        <div class="tile box is-child bgwhite">
+                          <h3 class="title is-5">
+
+                    <%= checkin.full_name %> Checked In %></h3>
+                          <p>
+                            <h3 class="subtitle is-6 grey"><%= checkin.updated_at %></h3></p>
+
+
+                        </div>
+                      </div>
+                    </div>
+                    <% } %>
+                      <%  })  %>
+                        <%  }  %>
+            </div>
+
+            <!-- ***********************************************************
+                    tab content // show spot feed
+************************************************************** -->
+
+            <div class="feed top-space-lg hidden">
+
+              <% comments.forEach(function(comment) { %>
+                <% if (comment.spot_id === spot[0].id) { %>
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical">
+                      <div class="tile box is-child bgwhite">
+                        <h3 class="title is-5">
+
+                      <%= comment.full_name %> said...
+                    </h3>
+                        <h3 class="subtitle is-6 grey">
+                      <%= comment.updated_at %>
+                    </h3>
+                        <p>
+                          <%= comment.comment %>
+                      </div>
+                    </div>
+                  </div>
+                  <%  }  %>
+                    <%  })  %>
+
+
+
+
+
+
+
+
+                      <% if (checkins) { %>
+                        <% checkins.forEach(function(checkin) { %>
+                          <% if (checkin.spot_id === spot[0].id) { %>
+                            <div class="tile is-ancestor">
+                              <div class="tile is-parent is-vertical">
+                                <div class="tile box is-child bgwhite">
+                                  <h3 class="title is-5">
+
+                      <%= checkin.full_name %> Checked In %></h3>
+                                  <p>
+                                    <h3 class="subtitle grey is-6"><%= checkin.updated_at %></h3></p>
+
+
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <%  })  %>
+                                <%  }  %>
+
+
+
+
+
+            </div>
+
+
+            <!-- ***********************************************************
+                tab content // post a comment
+************************************************************** -->
+
+            <div class="add-comment top-space-lg hidden">
+
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    <form class="" action="/users/location" method="post">
+
+                      <div class="field">
+                        <label class="label"><%= user[0].full_name %>, what are your thoughts?</label>
+                        <div class="control">
+                          <textarea class="textarea" id="comment" name="comment" placeholder="Comments..."></textarea>
+                          <input type="hidden" name="spot_id" value="<%=spot[0].id %>">
+                          <input type="hidden" name="spot_name" value="<%=spot[0].spot_name %>">
+                        </div>
+                      </div>
+
+
+                      <div class="control">
+                        <button class="button is-primary is-outlined is-focus" type="submit">Add Comment</button>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ***********************************************************
+                tab content // show comments
+************************************************************** -->
+            <div class="comments top-space-lg hidden">
+
+              <% comments.forEach(function(comment) { %>
+                <% if (comment.spot_id === spot[0].id) { %>
+                  <div class="tile is-ancestor">
+                    <div class="tile is-parent is-vertical">
+                      <div class="tile box is-child bgwhite">
+                        <h3 class="title is-5">
+
+                      <%= comment.full_name %> said...
+                    </h3>
+                        <h3 class="subtitle is-6 grey">
+                      <%= comment.updated_at %>
+                    </h3>
+                        <p>
+                          <%= comment.comment %>
+                      </div>
+                    </div>
+                  </div>
+                  <%  }  %>
+                    <%  })  %>
+
+
+
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <!-- </div> -->
+
+
+
+      <% include partials/footer %>
+  </body>
 
 </html>

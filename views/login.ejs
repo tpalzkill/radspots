@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title>Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
-</head>
+<% include partials/header %>
+<body>
+<% include partials/loggedout-nav %>
 
 
-<section class="section">
-  <div class="container">
+
+  <section class="hero login-width box">
+<div class="hero-body bgwhite">
+
+
     <form class="" action="/users/login" method="post">
 
       <div class="field">
@@ -22,16 +22,20 @@
       <div class="field">
         <label class="label">Password</label>
         <div class="control">
-        <input class="input" type="password" id='password' name='password'/>
+        <input class="input" type="password" id="password" name="password"/>
         </div>
       </div>
 
 <div class="control">
-  <button class="button is-success is-outlined is-focus" type="submit">Login</button>
+  <button class="button is-primary is-outlined is-focus" type="submit">Login</button>
 </div>
 
     </form>
   </div>
+
+
 </section>
 
+<% include partials/footer %>
+</body>
 </html>

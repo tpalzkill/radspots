@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
   table.integer('spot_id').unsigned();
   table.foreign('spot_id').references('spots.id').onDelete('cascade');
   table.string('comment');
+  table.timestamps(true, true);
 });
 };
 
