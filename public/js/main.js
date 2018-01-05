@@ -191,7 +191,7 @@ function addPhoto(albumName) {
  var file = files[0];
  var fileName = file.name;
  var albumPhotosKey = encodeURIComponent(albumName) + '//';
-alert(fileName)
+
  var photoKey = albumPhotosKey + fileName;
  s3.upload({
    Key: photoKey,
@@ -203,9 +203,26 @@ alert(fileName)
    }
     let spot = $('#hidden-spot-id').text()
     let user = $('#hidden-user-id').text()
+    var photo = data.location
 
-     $.post('/users/location', {photo: data.Location, spot_id: spot, user_id: user}, function(){
-         alert('done sending shit')
+     $.post('/users/location', {photo: data.Location, spot_id: spot, user_id: user})
+     .done(function(results) {
+       console.log(data)
+       var html =         '<div class="tile is-ancestor">' +
+                 '<div class="tile is-parent is-vertical">' +
+                   '<div class="tile box is-child bgwhite">' +
+                     '<figure class="image is-1by2">' +
+
+                         '<img src="' + data.Location + '">' +
+
+
+                     '</figure>' +
+                   '</div>' +
+                 '</div>' +
+               '</div>'
+       $('#fakeUploadPhoto').append(html)
+        $('#getPhotoForm').toggleClass('hidden')
+         alert('Photo uploaded successfully!')
         viewAlbum(albumName);
 
      })

@@ -263,7 +263,7 @@
             <div class="photos top-space-lg hidden">
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
-                  <div class="tile is-child  bgwhite box">
+                  <div class="tile is-child  bgwhite box" id="fakeUploadPhoto">
 
                     <% if (photos) { %>
                       <% photos.forEach(function(photo) { %>
@@ -306,7 +306,7 @@
                           tab content // show add photo
         ************************************************************** -->
 
-            <div class="add-photo top-space-lg hidden">
+            <div class="add-photo top-space-lg hidden" id="getPhotoForm">
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">

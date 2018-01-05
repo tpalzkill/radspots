@@ -469,22 +469,78 @@ console.log('HELLO I AM HERE PLEASE RENDER ')
 ====================================================================  */
 
 // router.get('/location', isLoggedIn, function(req, res) {
-//   console.log(req.body, 'REQ BODY FROM GET LOCATION')
-//   return knex('comments')
-//   .insert({
-//     user_id : req.session.passport.user.id,
-//     spot_id : req.body.spot_id,
-//     comment: req.body.comment
-//   })
-//   .then(function () {
-//     knex('comments').where('spot_id', req.body.spot_id)
-//     .then(function (results) {
-//       let comments = results;
-//       res.render('location', {user:req.session.passport.user, comments:comments})
-//     })
-//   })
+//   console.log(req.query,'HEY YOU DONE BE GOTTEN')
+//     let spot_id = req.query.spot_id
+//     let user_id = req.query.user_id
+//     let photo =  req.query.photo
+//   let featureSpot = {
+//     "type": "FeatureCollection",
+//     "features": []
+//   };
 //
-// })
+//   locationsFeatureCollection.features.forEach(function(feature) {
+//     if (feature.properties.name === req.body.spot_name) {
+//       featureSpot.features.push(feature);
+//     }
+//   });
+//
+//   let featureSpotString = JSON.stringify(featureSpot);
+//
+//   knex('spots').where('id', spot_id)
+//     .then(function(results) {
+//       let spot = results;
+//
+//
+//       knex('checkins')
+//         .then(function(results) {
+//
+//
+//           if (results) {
+//             knex('users')
+//               .join('checkins', 'users.id', 'checkins.user_id')
+//               .then(function(results) {
+//                 checkins = results;
+//               })
+//
+//           } else {
+//             checkins = "";
+//           }
+//
+//           knex('users')
+//             .join('comments', 'comments.user_id', 'users.id')
+//             .then(function(results) {
+//               let comments = results;
+//
+//               knex('photos')
+//                 .then(function(results) {
+//                   let photos;
+//
+//                   if (results) {
+//                     photos = results;
+//                   } else {
+//                     photos = "";
+//                   };
+//
+//
+//                   res.render('location', {
+//                     user: req.session.passport.user,
+//                     feature: featureSpotString,
+//                     spot: spot,
+//                     comments: comments,
+//                     checkins: checkins,
+//                     photos: photos
+//                   });
+//                 })
+//             });
+//         });
+//     });
+//   });
+
+
+
+
+
+
 
 
 /*  ====================================================================
@@ -634,7 +690,7 @@ router.post('/profile', function(req, res) {
   let url = req.body.url
 
   req.session.passport.user.profile_photo = url
-  req.save();
+
 
 
   console.log(req.session.passport.user, 'SHOULD BE UPDATED USERRRRRRR')

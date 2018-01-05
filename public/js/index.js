@@ -23,7 +23,6 @@ $(document).ready(function() {
 
   $('#nav-tabs').on('click', function() {
     var target = $(event.target)[0].id;
-console.log(target, 'WHAT THE HELL IS GETTIN CLICKED')
     $('div.get-content > div').not('.hidden').toggleClass('hidden');
     $('.' + target).toggleClass('hidden');
   });
