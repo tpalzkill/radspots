@@ -125,7 +125,7 @@ function viewAlbum(albumName) {
        '<div class="field">',
             '<div class="file">',
               '<label class="file-label">',
-        '<input class="file-input" id="photoupload" accept="image/*" type="file" name="resume">',
+        '<input class="file-input" id="photoupload"  type="file" name="resume">',
         '<span id="filename" class="file-cta">',
           '<span class="file-icon">',
             '<i class="fa fa-upload"></i>',
@@ -149,6 +149,7 @@ function viewAlbum(albumName) {
 }
 
 function addPhoto(albumName) {
+var location;
  var files = document.getElementById('photoupload').files;
  alert(files);
  if (!files.length) {
@@ -169,7 +170,7 @@ function addPhoto(albumName) {
      return alert('There was an error uploading your photo: ', fileName);
    }
    alert('Successfully uploaded photo.');
-   console.log(data.Location);
+   location = data.Location;
    viewAlbum(albumName);
  });
 }
