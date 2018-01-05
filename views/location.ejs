@@ -253,13 +253,37 @@
           tab content to be displayed/hidden on click
 ************************************************************** -->
 
+
+
+
+
+
           <div class="get-content">
 
             <div class="photos top-space-lg hidden">
               <div class="tile is-ancestor">
                 <div class="tile is-parent">
                   <div class="tile is-child  bgwhite box">
-                    HEYO THIS IS PHOTOS CONTENT LALLALALALALALALALLALALALAALLALALALALALLALALALALALALAL"
+
+                    <% if (photos) { %>
+                      <% photos.forEach(function(photo) { %>
+                        <% if (photo.spot_id === spot[0].id) { %>
+                          <div class="tile is-ancestor">
+                            <div class="tile is-parent is-vertical">
+                              <div class="tile box is-child bgwhite">
+                                <figure class="image is-1by2">
+
+                                    <img src="<%= photo.photo %>">
+
+
+                                </figure>
+
+                              </div>
+                            </div>
+                          </div>
+                          <%  }  %>
+                            <%  })  %>
+                              <%  }  %>
                   </div>
                 </div>
               </div>
@@ -276,6 +300,48 @@
                 </div>
               </div>
             </div>
+
+
+      <!-- ***********************************************************
+                          tab content // show add photo
+        ************************************************************** -->
+
+            <div class="add-photo top-space-lg hidden">
+              <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                  <div class="tile is-child  bgwhite box">
+                    <div class="field">
+                      <div class="file">
+                        <label class="file-label">
+                          <input class="file-input" id="spotphotoupload" type="file" name="resume">
+                          <span id="filename" class="file-cta">
+                            <span class="file-icon">
+                              <i class="fa fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                              Choose a Photo...
+                            </span>
+                          </span>
+                        </label>
+                      </div>
+                      <div id="hidden-spot-id" class="hidden"><%= spot[0].id %></div>
+                      <div id="hidden-user-id" class="hidden"><%= user[0].id %></div>
+                      <button class="button" id="addphoto" onclick="addPhoto('media')">
+                        'Add Photo'
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
 
             <!-- ***********************************************************
               tab content // show checkins

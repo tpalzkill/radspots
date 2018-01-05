@@ -151,7 +151,7 @@ function viewAlbum(albumName) {
  });
 }
 
-function addPhoto(albumName) {
+function addProfPhoto(albumName) {
  var files = document.getElementById('photoupload').files;
  if (!files.length) {
    return alert('Please choose a file to upload first.');
@@ -172,8 +172,39 @@ alert(fileName)
    }
 
      console.log(data.Location);
-    
+
      $.post('/users/profile', {url: data.Location}, function(){
+         alert('done sending shit')
+        viewAlbum(albumName);
+
+     })
+
+
+   })
+ }
+function addPhoto(albumName) {
+ var files = document.getElementById('spotphotoupload').files;
+ if (!files.length) {
+   return alert('Please choose a file to upload first.');
+ }
+
+ var file = files[0];
+ var fileName = file.name;
+ var albumPhotosKey = encodeURIComponent(albumName) + '//';
+alert(fileName)
+ var photoKey = albumPhotosKey + fileName;
+ s3.upload({
+   Key: photoKey,
+   Body: file,
+   ACL: 'public-read'
+ }, function(err, data) {
+   if (err) {
+     return alert('There was an error uploading your photo: ', fileName);
+   }
+    let spot = $('#hidden-spot-id').text()
+    let user = $('#hidden-user-id').text()
+
+     $.post('/users/location', {photo: data.Location, spot_id: spot, user_id: user}, function(){
          alert('done sending shit')
         viewAlbum(albumName);
 
