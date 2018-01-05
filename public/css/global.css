@@ -24,9 +24,24 @@
 }
 .fixed {
   position: fixed;
+  z-index: 1;
 }
 .top-space-lg {
   margin-top: 100px;
+}
+.top-space-sm {
+  margin-top: 15px;
+}
+.left-space {
+  margin-left: 5px;
+}
+.left-space:hover {
+  color: darkTurquoise;
+}
+.hero {
+ opacity: 0.96;
+ margin-left: 25%;
+ margin-top: 8%;
 }
 
 /* mapbox --------------------------------------------- */
