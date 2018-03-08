@@ -36,7 +36,11 @@ RadSpots is a social platform for all skateboard enthusiasts. Search Austin for 
 
 ![alt tag](screenshots/sign-up.png)
 ![alt tag](screenshots/login.png)
-![alt tag](screenshots/map.png)
+![alt tag](screenshots/map-tab.png)
+![alt tag](screenshots/locationpage.png)
+![alt tag](screenshots/locationphotoadd.png)
+![alt tag](screenshots/locationfeed.png)
+![alt tag](screenshots/locationcomment.png)
 ![alt tag](screenshots/profile.png)
 ![alt tag](screenshots/profile-photos.png)
 ![alt tag](screenshots/profile-videos.png)
