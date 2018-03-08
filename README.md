@@ -22,7 +22,7 @@ RadSpots is a social platform for all skateboard enthusiasts. Search Austin for 
 - The spot feed should show all activity for the spot
 
 # Tech used 
-- AWS
+- Amazon S3 Buckets for image and video hosting
 - Mapbox
 - PostgreSQL
 - Knex
@@ -32,5 +32,18 @@ RadSpots is a social platform for all skateboard enthusiasts. Search Austin for 
 - Bulma
 
 # Screenshots of working app
+#### NOTE: due to accidental batch queries to the Mapbox geocoding API our account was shut down and RadSpot locations are no longer visible on the main map. This also lead to the destruction of the individual RadSpot location page, but this functioned similarly to the user profile page pictured below with the additonal functionality of being able to comment, post photos/videos, and see all user feed from that specific location.  :poop:
 
-![alt tag](finished-images/website.png)
+![alt tag](screenshots/sign-up.png)
+![alt tag](screenshots/login.png)
+![alt tag](screenshots/map-menu.png)
+![alt tag](screenshots/profile.png)
+![alt tag](screenshots/profile-photos.png)
+![alt tag](screenshots/profile-videos.png)
+![alt tag](screenshots/profile-feed.png)
+![alt tag](screenshots/edit-profile.png)
+
+
+
+
+
